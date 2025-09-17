@@ -19,9 +19,21 @@
 
 */
 
-static MunitResult emptyAfterCreate(const MunitParameter params[], void *user_data)
+static void *circularBufferSetup(const MunitParameter params[], void *user_data)
 {
     CircularBuffer buffer = CircularBuffer_create(10);
+    return buffer;
+}
+
+static void circularBufferTearDown(void *fixture)
+{
+    CircularBuffer buffer = (CircularBuffer)fixture;
+    CircularBuffer_destroy(buffer);
+}
+
+static MunitResult emptyAfterCreate(const MunitParameter params[], void *user_data)
+{
+    CircularBuffer buffer = user_data;
     munit_assert_true(CircularBuffer_isEmpty(buffer));
 
     return MUNIT_OK;
@@ -29,7 +41,7 @@ static MunitResult emptyAfterCreate(const MunitParameter params[], void *user_da
 
 static MunitResult notEmptyAfterPut(const MunitParameter params[], void *user_data)
 {
-    CircularBuffer buffer = CircularBuffer_create(10);
+    CircularBuffer buffer = user_data;
     munit_assert_true(CircularBuffer_isEmpty(buffer));
 
     CircularBuffer_put(buffer, 1);
@@ -41,7 +53,7 @@ static MunitResult notEmptyAfterPut(const MunitParameter params[], void *user_da
 
 static MunitResult putAndGetCharIsEqual(const MunitParameter params[], void *user_data)
 {
-    CircularBuffer buffer = CircularBuffer_create(10);
+    CircularBuffer buffer = user_data;
     char           put    = 'a';
     CircularBuffer_put(buffer, put);
     char get;
@@ -53,7 +65,7 @@ static MunitResult putAndGetCharIsEqual(const MunitParameter params[], void *use
 
 static MunitResult putAndGetSecondCharIsEqual(const MunitParameter params[], void *user_data)
 {
-    CircularBuffer buffer = CircularBuffer_create(10);
+    CircularBuffer buffer = user_data;
     {
         char put = 'a';
         CircularBuffer_put(buffer, put);
@@ -75,8 +87,8 @@ static MunitResult putAndGetSecondCharIsEqual(const MunitParameter params[], voi
 
 static MunitResult checkOverWriteBuffer(const MunitParameter params[], void *user_data)
 {
-    const size_t   size   = 10;
-    CircularBuffer buffer = CircularBuffer_create(size);
+    CircularBuffer buffer = user_data;
+    const size_t   size   = CircularBuffer_size(buffer);
 
     const char in[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 
@@ -93,8 +105,9 @@ static MunitResult checkOverWriteBuffer(const MunitParameter params[], void *use
 
 static MunitResult checkCountBuffer(const MunitParameter params[], void *user_data)
 {
-    const size_t   putCount = 5;
-    CircularBuffer buffer   = CircularBuffer_create(10);
+    CircularBuffer buffer = user_data;
+
+    const size_t putCount = 5;
 
     munit_assert_int(0, ==, CircularBuffer_count(buffer));
 
@@ -109,9 +122,9 @@ static MunitResult checkCountBuffer(const MunitParameter params[], void *user_da
 
 static MunitResult checkOverWriteCountBuffer(const MunitParameter params[], void *user_data)
 {
+    CircularBuffer buffer   = user_data;
     const int      putCount = 15;
-    const int      size     = 10;
-    CircularBuffer buffer   = CircularBuffer_create(size);
+    int            size     = CircularBuffer_size(buffer);
 
     munit_assert_int(0, ==, CircularBuffer_count(buffer));
 
@@ -126,25 +139,24 @@ static MunitResult checkOverWriteCountBuffer(const MunitParameter params[], void
 
 static MunitResult checkSize(const MunitParameter params[], void *user_data)
 {
-    CircularBuffer buffer   = CircularBuffer_create(15);
+    CircularBuffer buffer = CircularBuffer_create(15);
     munit_assert_int(15, ==, CircularBuffer_size(buffer));
+    CircularBuffer_destroy(buffer);
 
     return MUNIT_OK;
-
-
 }
 
 static MunitTest circularBufferTests[] = {
-    {          (char *)"/emptyAfterCreate",           emptyAfterCreate, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-    {          (char *)"/notEmptyAfterPut",           notEmptyAfterPut, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-    {      (char *)"/putAndGetCharIsEqual",       putAndGetCharIsEqual, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-    {(char *)"/putAndGetSecondCharIsEqual", putAndGetSecondCharIsEqual, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-    {      (char *)"/checkOverWriteBuffer",       checkOverWriteBuffer, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-    {                        "/checkCount",           checkCountBuffer, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-    {                         "/checkSize",                  checkSize, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {          (char *)"/emptyAfterCreate",           emptyAfterCreate, circularBufferSetup, circularBufferTearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {          (char *)"/notEmptyAfterPut",           notEmptyAfterPut, circularBufferSetup, circularBufferTearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {      (char *)"/putAndGetCharIsEqual",       putAndGetCharIsEqual, circularBufferSetup, circularBufferTearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {(char *)"/putAndGetSecondCharIsEqual", putAndGetSecondCharIsEqual, circularBufferSetup, circularBufferTearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {      (char *)"/checkOverWriteBuffer",       checkOverWriteBuffer, circularBufferSetup, circularBufferTearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {                        "/checkCount",           checkCountBuffer, circularBufferSetup, circularBufferTearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {                         "/checkSize",                  checkSize,                NULL,                   NULL, MUNIT_TEST_OPTION_NONE, NULL},
     /* finalizer */
 
-    {              (char *)"no more tests",                       NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {              (char *)"no more tests",                       NULL,                NULL,                   NULL, MUNIT_TEST_OPTION_NONE, NULL},
 };
 
 MunitSuite circularBufferTestSuite = {

@@ -29,6 +29,10 @@ CircularBuffer CircularBuffer_bufferedCreate(char buf[], int size)
     return &staticCircularBuffer;
 }
 
+void CircularBuffer_destroy(CircularBuffer)
+{
+}
+
 bool CircularBuffer_put(CircularBuffer buffer, char ch)
 {
     buffer->buf[buffer->head] = ch;
