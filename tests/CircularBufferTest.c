@@ -28,7 +28,7 @@ static char *increaseFillBuf(char *buf, int fill_size, char start_val)
     }
 }
 
-static void putBuff(CircularBuffer cb, char *putBuf, int size)
+static void putBuff(CircularBuffer cb, const char *putBuf, int size)
 {
     for (int i = 0; i < size; ++i)
     {
@@ -44,15 +44,32 @@ static void getBuff(CircularBuffer cb, char *getBuf, int size)
     }
 }
 
-static void printBuff(char *buf, int size)
+static int sprintBuff(char *s, char *buf, int size)
 {
-    printf("printBuff ");
+    int j = 0;
+
+    j += sprintf(s + j, "Buff - ");
     for (int i = 0; i < size; ++i)
     {
-        printf("%i ", buf[i]);
+        j += sprintf(s + j, "%i ", buf[i]);
     }
-    printf("\n");
+    j += sprintf(s + j, "\n");
+
+    return j;
 }
+
+#define assertBuffIsEqual(buf1, buf2, size)                 \
+    {                                                       \
+        bool check = memcmp(buf1, buf2, size) == 0;         \
+        if (!check) {                                       \
+            int  j = 0;                                     \
+            char s[100];                                    \
+            j += sprintf(s + j, "Buffers is not equal:\n"); \
+            j += sprintBuff(s + j, buf1, size);             \
+            j += sprintBuff(s + j, buf2, size);             \
+            munit_error(s);                                 \
+        }                                                   \
+    }
 
 static void *circularBufferSetup(const MunitParameter params[], void *user_data)
 {
@@ -127,9 +144,7 @@ static MunitResult checkOverWriteBuffer(const MunitParameter params[], void *use
 
     const char in[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 
-    for (int i = 0; i < sizeof(in); i++) {
-        CircularBuffer_put(buffer, in[i]);
-    }
+    putBuff(buffer, in, sizeof(in));
 
     char get = CircularBuffer_get(buffer);
 
@@ -142,15 +157,12 @@ static MunitResult checkCountBuffer(const MunitParameter params[], void *user_da
 {
     CircularBuffer buffer = user_data;
 
-    const size_t putCount = 5;
-
     munit_assert_int(0, ==, CircularBuffer_count(buffer));
 
-    for (int i = 0; i < putCount; ++i) {
-        CircularBuffer_put(buffer, 3);
-    }
+    char in[] = {1, 2, 3};
+    putBuff(buffer, in, sizeof(in));
 
-    munit_assert_int(putCount, ==, CircularBuffer_count(buffer));
+    munit_assert_int(sizeof(in), ==, CircularBuffer_count(buffer));
 
     return MUNIT_OK;
 }
@@ -192,7 +204,7 @@ static MunitResult checkFullWrite(const MunitParameter params[], void *user_data
     char out[sizeof(in)];
     getBuff(buffer, out, sizeof(out));
 
-    munit_assert_int(memcmp(in, out, sizeof(in)), ==, 0);
+    assertBuffIsEqual(in, out, sizeof(in));
 
     return MUNIT_OK;
 }
@@ -211,12 +223,7 @@ static MunitResult checkReadOverWriteBuf(const MunitParameter params[], void *us
     char compare[sizeof(out)];
     increaseFillBuf(compare, sizeof(compare), sizeof(in) - CircularBuffer_size(buffer));
 
-    bool check = memcmp(out, compare, sizeof(out)) == 0;
-    if (!check) {
-        printBuff(out, sizeof(out));
-        printBuff(compare, sizeof(compare));
-    }
-    munit_assert_true(check);
+    assertBuffIsEqual(out, compare, sizeof(out));
 
     return MUNIT_OK;
 }
@@ -232,12 +239,7 @@ static MunitResult checkCreationBigBuffer(const MunitParameter params[], void *u
     char out[50];
     getBuff(buffer, out, sizeof(out));
 
-    bool check = memcmp(in, out, sizeof(out)) == 0;
-    if (!check) {
-        printBuff(in, sizeof(in));
-        printBuff(out, sizeof(out));
-    }
-    munit_assert_true(check);
+    assertBuffIsEqual(in, out, sizeof(in));
 
     CircularBuffer_destroy(buffer);
 
@@ -260,13 +262,11 @@ static MunitResult checkCreationFewBuffer(const MunitParameter params[], void *u
     putBuff(buffer1, in1, sizeof(in1));
     putBuff(buffer2, in2, sizeof(in2));
 
-
     getBuff(buffer1, out1, sizeof(out1));
-    munit_assert_true(memcmp(in1, out1, sizeof(out1)) == 0);
+    assertBuffIsEqual(in1, out1, sizeof(in1));
 
     getBuff(buffer2, out2, sizeof(out2));
-    munit_assert_true(memcmp(in2, out2, sizeof(out2)) == 0);
-
+    assertBuffIsEqual(in2, out2, sizeof(in2));
 
     CircularBuffer_destroy(buffer1);
     CircularBuffer_destroy(buffer2);
