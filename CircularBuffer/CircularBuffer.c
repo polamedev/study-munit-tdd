@@ -9,32 +9,39 @@ struct CircularBuffer {
     int   tail;
 };
 
-struct CircularBuffer staticBuffer;
+struct CircularBuffer staticCircularBuffer;
+
+static char staticBuffer[10];
 
 CircularBuffer
 CircularBuffer_create(int size)
 {
-    staticBuffer.size = size;
-    staticBuffer.head = 0;
-    staticBuffer.tail = 0;
-    return &staticBuffer;
+    staticCircularBuffer.size = size;
+    staticCircularBuffer.head = 0;
+    staticCircularBuffer.tail = 0;
+    staticCircularBuffer.buf  = staticBuffer;
+    return &staticCircularBuffer;
 }
 
 CircularBuffer CircularBuffer_bufferedCreate(char buf[], int size)
 {
-    return &staticBuffer;
+    return &staticCircularBuffer;
 }
 
 bool CircularBuffer_put(CircularBuffer buffer, char ch)
 {
+    buffer->buf[buffer->head] = ch;
     buffer->head++;
+    if (buffer->head == buffer->size) {
+        buffer->head = 0;
+    }
 
     return false;
 }
 
-char CircularBuffer_get(CircularBuffer)
+char CircularBuffer_get(CircularBuffer buffer)
 {
-    return 'a';
+    return buffer->buf[buffer->tail++];
 }
 
 bool CircularBuffer_isEmpty(CircularBuffer buffer)
