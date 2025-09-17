@@ -75,25 +75,20 @@ static MunitResult putAndGetSecondCharIsEqual(const MunitParameter params[], voi
 
 static MunitResult checkOverWriteBuffer(const MunitParameter params[], void *user_data)
 {
-    CircularBuffer buffer = CircularBuffer_create(10);
+    const size_t size = 10;
+    CircularBuffer buffer = CircularBuffer_create(size);
 
-    char in[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    const char in[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 
     for (int i = 0; i < sizeof(in); i++) {
         CircularBuffer_put(buffer, in[i]);
     }
 
-
     char get = CircularBuffer_get(buffer);
 
-    munit_assert_char(in[10], ==, get);
+    munit_assert_char(in[sizeof(in) - size], ==, get);
 
     return MUNIT_OK;
-}
-
-static MunitResult initTest(const MunitParameter params[], void *user_data)
-{
-    munit_assert_int(32, <=, 4096);
 }
 
 static MunitTest circularBufferTests[] = {
