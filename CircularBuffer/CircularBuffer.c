@@ -11,9 +11,9 @@ struct CircularBuffer {
     int   cnt;
 };
 
+static char staticBuffer[10];
 struct CircularBuffer staticCircularBuffer;
 
-static char staticBuffer[10];
 
 static void printPuffer(CircularBuffer buffer)
 {
