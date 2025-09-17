@@ -11,5 +11,8 @@ void           CircularBuffer_destroy(CircularBuffer);
 bool CircularBuffer_put(CircularBuffer, char);
 char CircularBuffer_get(CircularBuffer);
 
-bool CircularBuffer_isEmpty(CircularBuffer);
+int CircularBuffer_count(const CircularBuffer);
+int CircularBuffer_size(const CircularBuffer);
+
+bool CircularBuffer_isEmpty(const CircularBuffer);
 

@@ -54,7 +54,17 @@ char CircularBuffer_get(CircularBuffer buffer)
     return buffer->buf[buffer->tail++];
 }
 
-bool CircularBuffer_isEmpty(CircularBuffer buffer)
+int CircularBuffer_count(const CircularBuffer buffer)
+{
+    return buffer->cnt;
+}
+
+int CircularBuffer_size(const CircularBuffer buffer)
+{
+    return  buffer->size;
+}
+
+bool CircularBuffer_isEmpty(const CircularBuffer buffer)
 {
     return buffer->head == buffer->tail;
 }
