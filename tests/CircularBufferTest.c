@@ -6,13 +6,48 @@
 
 #include <stdio.h>
 
+/*
+Функционал для кругового буфера
+
+[_] Создание буфера определенного размера
+[_] Уничтожение - под вопросом, когда буфер создается циклически
+[_] Положить байт в буфер
+[_] Взять байт в буфер
+[_] Проверка Fifo
+[_] Проверка на пуст
+[_] Проверка на полон
+
+*/
+
+static MunitResult emptyAfterCreate(const MunitParameter params[], void *user_data)
+{
+    CircularBuffer buffer = CircularBuffer_create(10);
+    munit_assert_true(CircularBuffer_isEmpty(buffer));
+
+    return MUNIT_OK;
+}
+
+static MunitResult notEmptyAfterPut(const MunitParameter params[], void *user_data)
+{
+    CircularBuffer buffer = CircularBuffer_create(10);
+    munit_assert_true(CircularBuffer_isEmpty(buffer));
+
+    CircularBuffer_put(buffer, 1);
+
+    munit_assert_true(!CircularBuffer_isEmpty(buffer));
+
+
+    return MUNIT_OK;
+}
+
 static MunitResult initTest(const MunitParameter params[], void *user_data)
 {
     munit_assert_int(32, <=, 4096);
 }
 
 static MunitTest circularBufferTests[] = {
-    {        (char *)"/init", initTest, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {        (char *)"/emptyAfterCreate", emptyAfterCreate, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {        (char *)"/emptyAfterCreate", notEmptyAfterPut, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
     /* finalizer */
 
     {(char *)"no more tests",     NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
