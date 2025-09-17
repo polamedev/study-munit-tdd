@@ -32,6 +32,11 @@ bool CircularBuffer_put(CircularBuffer buffer, char ch)
     return false;
 }
 
+char CircularBuffer_get(CircularBuffer)
+{
+    return 'a';
+}
+
 bool CircularBuffer_isEmpty(CircularBuffer buffer)
 {
     return buffer->head == buffer->tail;

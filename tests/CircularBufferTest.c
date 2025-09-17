@@ -40,6 +40,18 @@ static MunitResult notEmptyAfterPut(const MunitParameter params[], void *user_da
     return MUNIT_OK;
 }
 
+static MunitResult putAndGetIsEqual(const MunitParameter params[], void *user_data)
+{
+    CircularBuffer buffer = CircularBuffer_create(10);
+    char put = 'a';
+    CircularBuffer_put(buffer, put);
+    char get;
+    get = CircularBuffer_get(buffer);
+
+    munit_assert_char(put, ==, get);
+    return MUNIT_OK;
+}
+
 static MunitResult initTest(const MunitParameter params[], void *user_data)
 {
     munit_assert_int(32, <=, 4096);
@@ -47,7 +59,8 @@ static MunitResult initTest(const MunitParameter params[], void *user_data)
 
 static MunitTest circularBufferTests[] = {
     {        (char *)"/emptyAfterCreate", emptyAfterCreate, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-    {        (char *)"/emptyAfterCreate", notEmptyAfterPut, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {        (char *)"/notEmptyAfterPut", notEmptyAfterPut, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {        (char *)"/putAndGetIsEqual", putAndGetIsEqual, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
     /* finalizer */
 
     {(char *)"no more tests",     NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},

@@ -9,7 +9,7 @@ CircularBuffer CircularBuffer_bufferedCreate(char buf[], int size);
 void           CircularBuffer_destroy(CircularBuffer);
 
 bool CircularBuffer_put(CircularBuffer, char);
-void CircularBuffer_get(CircularBuffer);
+char CircularBuffer_get(CircularBuffer);
 
 bool CircularBuffer_isEmpty(CircularBuffer);
 
