@@ -1,6 +1,7 @@
 #include "CircularBuffer.h"
 
 #include <stddef.h>
+#include <stdio.h>
 
 struct CircularBuffer {
     char *buf;
@@ -14,8 +15,18 @@ struct CircularBuffer staticCircularBuffer;
 
 static char staticBuffer[10];
 
-CircularBuffer
-CircularBuffer_create(int size)
+static void printPuffer(CircularBuffer buffer)
+{
+    printf("size = %i; count = %i; ", buffer->size, buffer->cnt);
+
+    for (int i = 0; i < buffer->size; ++i)
+    {
+        printf("%i ", buffer->buf[i]);
+    }
+    printf("\n");
+}
+
+CircularBuffer CircularBuffer_create(int size)
 {
     staticCircularBuffer.size = size;
     staticCircularBuffer.head = 0;
@@ -33,21 +44,25 @@ void CircularBuffer_destroy(CircularBuffer)
 {
 }
 
+static int nextIndex(int *index, int size)
+{
+    (*index)++;
+    if (*index == size) {
+        *index = 0;
+    }
+    return *index;
+}
+
 bool CircularBuffer_put(CircularBuffer buffer, char ch)
 {
     buffer->buf[buffer->head] = ch;
     buffer->cnt++;
-    buffer->head++;
-    if (buffer->head == buffer->size) {
-        buffer->head = 0;
-    }
+    nextIndex(&buffer->head, buffer->size);
 
-    if (buffer->cnt > buffer->size) {
+    if (buffer->cnt > buffer->size)
+    {
         buffer->cnt--;
-        buffer->tail++;
-        if (buffer->tail == buffer->size) {
-            buffer->tail = 0;
-        }
+        nextIndex(&buffer->tail, buffer->size);
     }
 
     return false;
@@ -55,7 +70,9 @@ bool CircularBuffer_put(CircularBuffer buffer, char ch)
 
 char CircularBuffer_get(CircularBuffer buffer)
 {
-    return buffer->buf[buffer->tail++];
+    char ch = buffer->buf[buffer->tail];
+    nextIndex(&buffer->tail, buffer->size);
+    return ch;
 }
 
 int CircularBuffer_count(const CircularBuffer buffer)
@@ -65,7 +82,7 @@ int CircularBuffer_count(const CircularBuffer buffer)
 
 int CircularBuffer_size(const CircularBuffer buffer)
 {
-    return  buffer->size;
+    return buffer->size;
 }
 
 bool CircularBuffer_isEmpty(const CircularBuffer buffer)
