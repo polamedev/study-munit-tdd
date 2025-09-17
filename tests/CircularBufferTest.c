@@ -193,7 +193,6 @@ static MunitResult checkFullWrite(const MunitParameter params[], void *user_data
     getBuff(buffer, out, sizeof(out));
 
     munit_assert_int(memcmp(in, out, sizeof(in)), ==, 0);
-    CircularBuffer_destroy(buffer);
 
     return MUNIT_OK;
 }
@@ -245,6 +244,36 @@ static MunitResult checkCreationBigBuffer(const MunitParameter params[], void *u
     return MUNIT_OK;
 }
 
+static MunitResult checkCreationFewBuffer(const MunitParameter params[], void *user_data)
+{
+    CircularBuffer buffer1 = CircularBuffer_create(10);
+    CircularBuffer buffer2 = CircularBuffer_create(20);
+
+    char in1[10];
+    char out1[10];
+    char in2[20];
+    char out2[20];
+
+    increaseFillBuf(in1, sizeof(in1), 0);
+    increaseFillBuf(in2, sizeof(in2), 55);
+
+    putBuff(buffer1, in1, sizeof(in1));
+    putBuff(buffer2, in2, sizeof(in2));
+
+
+    getBuff(buffer1, out1, sizeof(out1));
+    munit_assert_true(memcmp(in1, out1, sizeof(out1)) == 0);
+
+    getBuff(buffer2, out2, sizeof(out2));
+    munit_assert_true(memcmp(in2, out2, sizeof(out2)) == 0);
+
+
+    CircularBuffer_destroy(buffer1);
+    CircularBuffer_destroy(buffer2);
+
+    return MUNIT_OK;
+}
+
 static MunitTest circularBufferTests[] = {
     {      "/emptyAfterCreate",           emptyAfterCreate, circularBufferSetup, circularBufferTearDown, MUNIT_TEST_OPTION_NONE, NULL},
     {      "/notEmptyAfterPut",           notEmptyAfterPut, circularBufferSetup, circularBufferTearDown, MUNIT_TEST_OPTION_NONE, NULL},
@@ -256,6 +285,7 @@ static MunitTest circularBufferTests[] = {
     {        "/checkFullWrite",             checkFullWrite, circularBufferSetup, circularBufferTearDown, MUNIT_TEST_OPTION_NONE, NULL},
     { "/checkReadOverWriteBuf",      checkReadOverWriteBuf, circularBufferSetup, circularBufferTearDown, MUNIT_TEST_OPTION_NONE, NULL},
     {"/checkCreationBigBuffer",     checkCreationBigBuffer,                NULL,                   NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {"/checkCreationFewBuffer",     checkCreationFewBuffer,                NULL,                   NULL, MUNIT_TEST_OPTION_NONE, NULL},
 
     /* finalizer */
 

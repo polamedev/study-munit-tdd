@@ -2,6 +2,7 @@
 
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 struct CircularBuffer {
     char *buf;
@@ -28,11 +29,12 @@ static void printPuffer(CircularBuffer buffer)
 
 CircularBuffer CircularBuffer_create(int size)
 {
-    staticCircularBuffer.size = size;
-    staticCircularBuffer.head = 0;
-    staticCircularBuffer.tail = 0;
-    staticCircularBuffer.buf  = staticBuffer;
-    return &staticCircularBuffer;
+    CircularBuffer cb = calloc(sizeof(CircularBuffer), 1);
+    cb->size = size;
+    cb->head = 0;
+    cb->tail = 0;
+    cb->buf  = calloc(sizeof(char), size);
+    return cb;
 }
 
 CircularBuffer CircularBuffer_bufferedCreate(char buf[], int size)
@@ -40,8 +42,10 @@ CircularBuffer CircularBuffer_bufferedCreate(char buf[], int size)
     return &staticCircularBuffer;
 }
 
-void CircularBuffer_destroy(CircularBuffer)
+void CircularBuffer_destroy(CircularBuffer cb)
 {
+    free(cb->buf);
+    free(cb);
 }
 
 static int nextIndex(int *index, int size)
