@@ -1,3 +1,5 @@
+// cppcheck-suppress-file syntaxError
+
 /*
 
     ClockService - модуль который запускает зарегистрированные колбеки, когда настало время
@@ -31,17 +33,23 @@
 
 #include <stdio.h>
 
-static MunitResult temp(const MunitParameter params[], void *user_data)
+static MunitResult emptyClockServiceAfterCreate(const MunitParameter params[], void *user_data)
 {
+    ClockService_create();
+
+    int count = ClockService_count();
+
+    munit_assert_int(count, ==, 0);
+    ClockService_destroy();
 
     return MUNIT_OK;
 }
 
 static MunitTest clockServiceTests[] = {
-    {                "/temp", temp, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {"/emptyClockServiceAfterCreate", emptyClockServiceAfterCreate, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
     /* finalizer */
 
-    {(char *)"no more tests", NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {        (char *)"no more tests",                         NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
 };
 
 MunitSuite clockServiceTestSuite = {
