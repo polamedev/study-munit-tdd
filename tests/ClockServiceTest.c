@@ -52,15 +52,27 @@ static MunitResult emptyAfterCreate(const MunitParameter params[], void *user_da
 static MunitResult notZeroSizeAfterCreate(const MunitParameter params[], void *user_data)
 {
     munit_assert_int(ClockService_size(), !=, 0);
-    return MUNIT_OK; 
+    return MUNIT_OK;
+}
+
+static void testCallback()
+{
+}
+
+static MunitResult notEmptyAfterSchedule(const MunitParameter params[], void *user_data)
+{
+    ClockService_schedule(testCallback, 100);
+    munit_assert_int(ClockService_count(), !=, 0);
+    return MUNIT_OK;
 }
 
 static MunitTest clockServiceTests[] = {
     {      "/emptyAfterCreate",       emptyAfterCreate, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
     {"/notZeroSizeAfterCreate", notZeroSizeAfterCreate, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    { "/notEmptyAfterSchedule",  notEmptyAfterSchedule, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
     /* finalizer */
 
-    {              (char *)"no more tests",                               NULL, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {  (char *)"no more tests",                   NULL, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
 };
 
 MunitSuite clockServiceTestSuite = {
