@@ -9,8 +9,8 @@
     - Вызов колбеков при наступлении времени
     - Удаление зарегистрированного колбека по идентификационному номеру
     - Возврат периода вызова колбека по id
-    - Возврат общего числа зарегистрированных колбеков
-    - Возврат максимального количества возможных регистраций
+    + Возврат общего числа зарегистрированных колбеков
+    + Возврат максимального количества возможных регистраций
 
     тесты:
     - Создание clockService
@@ -43,17 +43,24 @@ static void testTearDown(void *fixture)
     ClockService_destroy();
 }
 
-static MunitResult emptyClockServiceAfterCreate(const MunitParameter params[], void *user_data)
+static MunitResult emptyAfterCreate(const MunitParameter params[], void *user_data)
 {
     munit_assert_int(ClockService_count(), ==, 0);
     return MUNIT_OK;
 }
 
+static MunitResult notZeroSizeAfterCreate(const MunitParameter params[], void *user_data)
+{
+    munit_assert_int(ClockService_size(), !=, 0);
+    return MUNIT_OK; 
+}
+
 static MunitTest clockServiceTests[] = {
-    {"/emptyClockServiceAfterCreate", emptyClockServiceAfterCreate, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {      "/emptyAfterCreate",       emptyAfterCreate, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {"/notZeroSizeAfterCreate", notZeroSizeAfterCreate, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
     /* finalizer */
 
-    {        (char *)"no more tests",                         NULL, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {              (char *)"no more tests",                               NULL, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
 };
 
 MunitSuite clockServiceTestSuite = {

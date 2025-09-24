@@ -12,3 +12,8 @@ int ClockService_count()
 {
     return 0;
 }
+
+int ClockService_size()
+{
+    return 10;
+}
