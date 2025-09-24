@@ -33,23 +33,27 @@
 
 #include <stdio.h>
 
-static MunitResult emptyClockServiceAfterCreate(const MunitParameter params[], void *user_data)
+static void *testSetup(const MunitParameter params[], void *user_data)
 {
     ClockService_create();
-
-    int count = ClockService_count();
-
-    munit_assert_int(count, ==, 0);
+    return NULL;
+}
+static void testTearDown(void *fixture)
+{
     ClockService_destroy();
+}
 
+static MunitResult emptyClockServiceAfterCreate(const MunitParameter params[], void *user_data)
+{
+    munit_assert_int(ClockService_count(), ==, 0);
     return MUNIT_OK;
 }
 
 static MunitTest clockServiceTests[] = {
-    {"/emptyClockServiceAfterCreate", emptyClockServiceAfterCreate, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {"/emptyClockServiceAfterCreate", emptyClockServiceAfterCreate, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
     /* finalizer */
 
-    {        (char *)"no more tests",                         NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {        (char *)"no more tests",                         NULL, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
 };
 
 MunitSuite clockServiceTestSuite = {
