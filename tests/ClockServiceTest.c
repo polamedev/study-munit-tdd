@@ -37,7 +37,7 @@
 
 static void *testSetup(const MunitParameter params[], void *user_data)
 {
-    printf("Millis %i", millis());
+    printf("Millis %i", ClockService_millis());
     printf("Millis %i", millis2());
     ClockService_create();
     return NULL;
