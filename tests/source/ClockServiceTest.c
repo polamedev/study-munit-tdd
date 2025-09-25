@@ -79,7 +79,7 @@ static MunitTest clockServiceTests[] = {
     {  (char *)"no more tests",                   NULL, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
 };
 
-MunitSuite clockServiceTestSuite = {
+static MunitSuite clockServiceTestSuite = {
     /* This string will be prepended to all test names in this suite;
      * for example, "/example/rand" will become "/µnit/example/rand".
      * Note that, while it doesn't really matter for the top-level
@@ -104,3 +104,15 @@ MunitSuite clockServiceTestSuite = {
      * MUNIT_SUITE_OPTION_NONE or 0 to use the default settings. */
     MUNIT_SUITE_OPTION_NONE,
 };
+
+int main(int argc, char *argv[MUNIT_ARRAY_PARAM(argc + 1)])
+{
+    printf("AllTest file\n");
+
+    /* Finally, we'll actually run our test suite!  That second argument
+     * is the user_data parameter which will be passed either to the
+     * test or (if provided) the fixture setup function. */
+    
+
+    return munit_suite_main(&clockServiceTestSuite, (void *)"µnit", argc, argv);;
+}

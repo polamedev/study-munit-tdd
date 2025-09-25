@@ -9,10 +9,15 @@ project(
     # языки проекта, если не указать, будет принято, что проект на С и С++
     LANGUAGES C)
 
+# Подключение CTest для тестирования, добавляет определение BUILD_TESTING
+include(CTest)
+
 include(cmake/test-file.cmake)
 
-add_subdirectory(munit)
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(munit)
+    add_subdirectory(tests)
+endif()
 
 add_library(code-lib STATIC)
 

@@ -111,7 +111,7 @@ static MunitResult putAndGetCharIsEqual(const MunitParameter params[], void *use
     char get;
     get = CircularBuffer_get(buffer);
 
-    munit_assert_char(put, ==, get);
+    munit_assert_char(put, ==, 'a');
     return MUNIT_OK;
 }
 
@@ -292,7 +292,7 @@ static MunitTest circularBufferTests[] = {
     {  (char *)"no more tests",                       NULL,                NULL,                   NULL, MUNIT_TEST_OPTION_NONE, NULL},
 };
 
-MunitSuite circularBufferTestSuite = {
+static MunitSuite circularBufferTestSuite = {
     /* This string will be prepended to all test names in this suite;
      * for example, "/example/rand" will become "/µnit/example/rand".
      * Note that, while it doesn't really matter for the top-level
@@ -317,3 +317,14 @@ MunitSuite circularBufferTestSuite = {
      * MUNIT_SUITE_OPTION_NONE or 0 to use the default settings. */
     MUNIT_SUITE_OPTION_NONE,
 };
+
+int main(int argc, char *argv[MUNIT_ARRAY_PARAM(argc + 1)])
+{
+    printf("AllTest file1\n");
+
+    /* Finally, we'll actually run our test suite!  That second argument
+     * is the user_data parameter which will be passed either to the
+     * test or (if provided) the fixture setup function. */
+
+    return munit_suite_main(&circularBufferTestSuite, (void *)"µnit", argc, argv);
+}

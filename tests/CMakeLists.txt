@@ -1,21 +1,13 @@
 
-add_library(mock STATIC source/MockMillisService.c)
-target_link_libraries(mock 
-    PRIVATE
-    code-lib
-)
+# Определяем mock в качестве объектной библиотеки
+add_library(Mock-MillisService OBJECT source/MockMillisService.c)
+target_link_libraries(Mock-MillisService PRIVATE code-lib)
 
 
+add_executable(Test-CircularBuffer source/CircularBufferTest.c)
+target_link_libraries(Test-CircularBuffer munit code-lib)
+add_test(Test-CircularBuffer Test-CircularBuffer)
 
-add_executable(Tests
-    source/AllTests.c
-    source/CircularBufferTest.c
-    source/ClockServiceTest.c
-)
-
-target_link_libraries(Tests
-    munit
-    # mock должен идти перед code-lib для подмены реализации
-    mock 
-    code-lib
-)
+add_executable(Test-ClockServiceTest source/ClockServiceTest.c $<TARGET_OBJECTS:Mock-MillisService>)
+target_link_libraries(Test-ClockServiceTest munit code-lib)
+add_test(Test-ClockServiceTest Test-ClockServiceTest)
