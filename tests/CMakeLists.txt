@@ -1,5 +1,5 @@
 
-add_library(mock STATIC MockMillisService.c)
+add_library(mock STATIC source/MockMillisService.c)
 target_link_libraries(mock 
     PRIVATE
     code-lib
@@ -8,9 +8,9 @@ target_link_libraries(mock
 
 
 add_executable(Tests
-    AllTests.c
-    CircularBufferTest.c
-    ClockServiceTest.c
+    source/AllTests.c
+    source/CircularBufferTest.c
+    source/ClockServiceTest.c
 )
 
 target_link_libraries(Tests
