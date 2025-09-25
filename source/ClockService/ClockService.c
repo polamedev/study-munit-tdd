@@ -30,9 +30,3 @@ bool ClockService_schedule(ScheduleCallback callback, int mSecPeriod)
     clockSchedule.count++;
     return true;
 }
-
-int ClockService_millis()
-{
-    return millis();
-}
-

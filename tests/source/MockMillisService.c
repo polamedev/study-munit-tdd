@@ -11,7 +11,8 @@ int millis()
     return 1;
 }
 
-int millis2()
+
+const char *MillisService_moduleInfo()
 {
-    return 2;
+    return "MOCK Millis Service module";
 }

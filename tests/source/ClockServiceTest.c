@@ -37,8 +37,6 @@
 
 static void *testSetup(const MunitParameter params[], void *user_data)
 {
-    printf("Millis %i", ClockService_millis());
-    printf("Millis %i", millis2());
     ClockService_create();
     return NULL;
 }
@@ -107,7 +105,7 @@ static MunitSuite clockServiceTestSuite = {
 
 int main(int argc, char *argv[MUNIT_ARRAY_PARAM(argc + 1)])
 {
-    printf("AllTest file\n");
+    printf("Millis Lib: %s\n", MillisService_moduleInfo());
 
     /* Finally, we'll actually run our test suite!  That second argument
      * is the user_data parameter which will be passed either to the

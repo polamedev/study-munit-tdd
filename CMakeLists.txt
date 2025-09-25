@@ -32,7 +32,6 @@ target_sources(code-lib
     PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/source/CircularBuffer/CircularBuffer.c
     ${CMAKE_CURRENT_SOURCE_DIR}/source/ClockService/ClockService.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/source/MillisService/MillisService.c
 )
 
 add_executable(TDD

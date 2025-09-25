@@ -320,8 +320,6 @@ static MunitSuite circularBufferTestSuite = {
 
 int main(int argc, char *argv[MUNIT_ARRAY_PARAM(argc + 1)])
 {
-    printf("AllTest file1\n");
-
     /* Finally, we'll actually run our test suite!  That second argument
      * is the user_data parameter which will be passed either to the
      * test or (if provided) the fixture setup function. */

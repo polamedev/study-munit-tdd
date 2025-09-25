@@ -2,4 +2,4 @@
 
 int millis();
 
-int millis2();
+const char *MillisService_moduleInfo();
