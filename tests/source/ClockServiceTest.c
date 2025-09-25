@@ -29,14 +29,24 @@
 
 #include <ClockService.h>
 
-#include <MillisService.h>
+#include "MockMillisService.h"
 
 #include <munit.h>
 
 #include <stdio.h>
 
+int callbackCount = 0;
+
+static void testCallback()
+{
+    callbackCount++;
+}
+
+//////////////////////////////////////////////////////////
+
 static void *testSetup(const MunitParameter params[], void *user_data)
 {
+    callbackCount = 0;
     ClockService_create();
     return NULL;
 }
@@ -44,6 +54,8 @@ static void testTearDown(void *fixture)
 {
     ClockService_destroy();
 }
+
+////////////////////////////////////////////////////////////////////
 
 static MunitResult emptyAfterCreate(const MunitParameter params[], void *user_data)
 {
@@ -57,10 +69,6 @@ static MunitResult notZeroSizeAfterCreate(const MunitParameter params[], void *u
     return MUNIT_OK;
 }
 
-static void testCallback()
-{
-}
-
 static MunitResult notEmptyAfterSchedule(const MunitParameter params[], void *user_data)
 {
     ClockService_schedule(testCallback, 100);
@@ -68,10 +76,21 @@ static MunitResult notEmptyAfterSchedule(const MunitParameter params[], void *us
     return MUNIT_OK;
 }
 
+static MunitResult schedule100ButIts99(const MunitParameter params[], void *user_data)
+{
+    ClockService_schedule(testCallback, 100);
+
+    MockMillisService_setMillis(99);
+    ClockService_call();
+
+    munit_assert_int(callbackCount, ==, 0);
+}
+
 static MunitTest clockServiceTests[] = {
     {      "/emptyAfterCreate",       emptyAfterCreate, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
     {"/notZeroSizeAfterCreate", notZeroSizeAfterCreate, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
     { "/notEmptyAfterSchedule",  notEmptyAfterSchedule, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {    "/schedule100ButIts99",     schedule100ButIts99, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
     /* finalizer */
 
     {  (char *)"no more tests",                   NULL, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
@@ -110,7 +129,7 @@ int main(int argc, char *argv[MUNIT_ARRAY_PARAM(argc + 1)])
     /* Finally, we'll actually run our test suite!  That second argument
      * is the user_data parameter which will be passed either to the
      * test or (if provided) the fixture setup function. */
-    
 
-    return munit_suite_main(&clockServiceTestSuite, (void *)"µnit", argc, argv);;
+    return munit_suite_main(&clockServiceTestSuite, (void *)"µnit", argc, argv);
+    ;
 }

@@ -1,5 +1,7 @@
 #pragma once
 
-int millis();
+#include <stdint.h>
+
+uint32_t millis();
 
 const char *MillisService_moduleInfo();

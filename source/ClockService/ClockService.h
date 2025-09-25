@@ -9,3 +9,9 @@ void ClockService_destroy();
 int  ClockService_count();
 int  ClockService_size();
 bool ClockService_schedule(ScheduleCallback callback, int mSecPeriod);
+
+/**
+ * @brief  Функция периодического вызова сервиса (таска)
+ *         Должна вызываться по таймеру
+ */
+void ClockService_call();
