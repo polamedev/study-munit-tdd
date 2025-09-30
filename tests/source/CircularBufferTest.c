@@ -111,7 +111,7 @@ static MunitResult putAndGetCharIsEqual(const MunitParameter params[], void *use
     char get;
     get = CircularBuffer_get(buffer);
 
-    munit_assert_char(put, ==, 'a');
+    munit_assert_char(put, ==, 'c');
     return MUNIT_OK;
 }
 

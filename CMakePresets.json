@@ -2,6 +2,7 @@
     "version": 3,
     "configurePresets": [
         {
+            // Общий конфиг определяет генератор и директорию сборки
             "name": "config-base",
             "hidden": true,
             "displayName": "base Configuration",
@@ -10,18 +11,18 @@
             "binaryDir": "${sourceDir}/_build/${presetName}"
         },
         {
+            // Конфиг отладки
             "name": "debug",
-            "displayName": "Config Debug",
-            "description": "Sets debug build type and cortex arch",
+            "description": "Sets Debug build type and cortex arch",
             "inherits": "config-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
+            // Конфиг релиза
             "name": "release",
-            "displayName": "Config Release",
-            "description": "Sets release build type",
+            "description": "Sets Release build type",
             "inherits": "debug",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
@@ -30,29 +31,46 @@
     ],
     "buildPresets": [
         {
+            // Базовый конфиг сборки определяет главный таргет
             "name": "build-base",
             "hidden": true,
-            "configurePreset": "debug"
+            "configurePreset": "release",
+            "targets": [
+                "TDD"
+            ]
         },
         {
-            "name": "debug",
-            "displayName": "Build Debug",
-            "inherits": "build-base"
-        },
-        {
+            // Сборка релизного приложения
             "name": "release",
-            "displayName": "Build Release",
+            "displayName": "Release App",
             "inherits": "build-base",
             "configurePreset": "release"
         },
         {
-            "name": "Build Test",
-            "description": "Сборка только целей теста",
+            // Сборка дебажного приложения
+            "name": "debug",
+            "displayName": "Debug App",
+            "inherits": "release",
+            "configurePreset": "debug"
+
+        },
+        
+        {
+            // Сборка всех тестов
+            "name": "tests-debug",
             "inherits": "debug",
             "targets": [
                 "Test-CircularBuffer",
                 "Test-ClockServiceTest"
             ]
+        },
+
+        {
+            // Сборка всех релизных тестов
+            "name": "tests-release",
+            "inherits": "tests-debug",
+            "configurePreset": "release"
+
         }
     ],
     "testPresets": [
