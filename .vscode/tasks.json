@@ -1,0 +1,41 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			// Задача запуски сборки с последующим запуском тестов
+			"type": "cmake",
+			"label": "CMake: test",
+			"command": "test",
+			"preset": "All Test",
+			"problemMatcher": [
+				{
+					// problemMatcher для munit test
+					"owner": "cpp",
+					"source": "munit test",
+					"fileLocation": [
+						"autoDetect",
+						"${cwd}"
+					],
+					"pattern": {
+						"regexp": "^Error: (.*):(\\d+):(.*)$",
+						"file": 1,
+						"line": 2,
+						"message": 3
+					}
+				}
+			],
+			"detail": "CMake template test task",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"dependsOn": [
+				"SH-CMake: Build"
+			],
+			"icon": {
+				"color": "terminal.ansiCyan",
+				"id": "beaker"
+			}
+		}
+	]
+}
