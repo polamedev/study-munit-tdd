@@ -32,18 +32,23 @@
 		{
 			// Задача сборки через cmake по умолчанию
 			"label": "MY CMake: build",
-			"detail": "Задача сборки через cmake по умолчанию, поддерживает выбор таргетов из ui. БАГ необходимо скопировать в директорию .vscode ",
-			"type": "cmake",
-			"command": "build",
-			"targets": [
-				"${input:INPUT_TARGET_NAME}"
+			"detail": "Задача вызывает зависимую задачу сборки cmake через командную строку, нужно чтобы задать задачу по умолчанию",
+			"type": "shell",
+			"command": "",
+			"dependsOn": [
+				"SH-CMake: Build"
 			],
-			"preset": "tests-debug",
 			"group": {
 				"kind": "build",
 				"isDefault": true
 			},
 			"problemMatcher": [],
+			"presentation": {
+				"echo": false,
+				"reveal": "silent",
+				"focus": false,
+				"showReuseMessage": false,
+			},
 			"icon": {
 				"id": "extensions"
 			}
