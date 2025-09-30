@@ -2,14 +2,13 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			// Задача запуски сборки с последующим запуском тестов
-			"type": "cmake",
 			"label": "CMake: test",
+			"detail": "Запуск тестов Cmake. Ctrl + Shift + U",
+			"type": "cmake",
 			"command": "test",
 			"preset": "All Test",
 			"problemMatcher": [
 				{
-					// problemMatcher для munit test
 					"owner": "cpp",
 					"source": "munit test",
 					"fileLocation": [
@@ -24,17 +23,43 @@
 					}
 				}
 			],
-			"detail": "CMake template test task",
+			"group": "build",
+			"icon": {
+				"color": "terminal.ansiCyan",
+				"id": "beaker"
+			}
+		},
+		{
+			// Задача сборки через cmake по умолчанию
+			"label": "MY CMake: build",
+			"detail": "Задача сборки через cmake по умолчанию, поддерживает выбор таргетов из ui. БАГ необходимо скопировать в директорию .vscode ",
+			"type": "cmake",
+			"command": "build",
+			"targets": [
+				"${input:INPUT_TARGET_NAME}"
+			],
+			"preset": "tests-debug",
 			"group": {
 				"kind": "build",
 				"isDefault": true
 			},
-			"dependsOn": [
-				"SH-CMake: Build"
-			],
+			"problemMatcher": [],
 			"icon": {
-				"color": "terminal.ansiCyan",
-				"id": "beaker"
+				"id": "extensions"
+			}
+		},
+	],
+	"inputs": [
+		{
+			"id": "INPUT_TARGET_NAME",
+			"descriptdetaion": "Если command:cmake.buildTargetName содержит [Targets In Preset], то заменить его на all",
+			"type": "command",
+			"command": "extension.commandvariable.transform",
+			"args": {
+				"text": "${command:cmake.buildTargetName}",
+				"find": ".Targets In Preset.",
+				"replace": "all",
+				"flags": "g"
 			}
 		}
 	]
