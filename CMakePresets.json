@@ -1,0 +1,66 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "config-base",
+            "hidden": true,
+            "displayName": "base Configuration",
+            "description": "Default build using Ninja generator",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/_build/${presetName}"
+        },
+        {
+            "name": "debug",
+            "displayName": "Config Debug",
+            "description": "Sets debug build type and cortex arch",
+            "inherits": "config-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "release",
+            "displayName": "Config Release",
+            "description": "Sets release build type",
+            "inherits": "debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "build-base",
+            "hidden": true,
+            "configurePreset": "debug"
+        },
+        {
+            "name": "debug",
+            "displayName": "Build Debug",
+            "inherits": "build-base"
+        },
+        {
+            "name": "release",
+            "displayName": "Build Release",
+            "inherits": "build-base",
+            "configurePreset": "release"
+        },
+        {
+            "name": "Build Test",
+            "description": "Сборка только целей теста",
+            "inherits": "debug",
+            "targets": [
+                "Test-CircularBuffer",
+                "Test-ClockServiceTest"
+            ]
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "All Test",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "debug"
+        }
+    ]
+}
