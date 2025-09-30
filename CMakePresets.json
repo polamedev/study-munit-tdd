@@ -52,9 +52,7 @@
             "displayName": "Debug App",
             "inherits": "release",
             "configurePreset": "debug"
-
         },
-        
         {
             // Сборка всех тестов
             "name": "tests-debug",
@@ -64,21 +62,38 @@
                 "Test-ClockServiceTest"
             ]
         },
-
         {
             // Сборка всех релизных тестов
             "name": "tests-release",
             "inherits": "tests-debug",
             "configurePreset": "release"
-
         }
     ],
     "testPresets": [
         {
             "name": "All Test",
             "description": "",
-            "displayName": "",
             "configurePreset": "debug"
+        },
+        {
+            // Отдельный пресет тестов для CircularBuffer, добавил чтобы попробовать функционал нескольких персетов
+            "name": "Test-CircularBuffer",
+            "configurePreset": "debug",
+            "filter": {
+                "include": {
+                    "name": "Test-CircularBuffer"
+                }
+            }
+        },
+        {
+            // Отдельный пресет тестов для CircularBuffer, добавил чтобы попробовать функционал нескольких персетов
+            "name": "Test-ClockServiceTest",
+            "configurePreset": "debug",
+            "filter": {
+                "include": {
+                    "name": "Test-ClockServiceTest"
+                }
+            }
         }
     ]
 }
