@@ -10,6 +10,7 @@
 			"problemMatcher": [
 				{
 					"owner": "test",
+					"source": "munit",
 					"fileLocation": [
 						"autoDetect",
 						"${cwd}"
