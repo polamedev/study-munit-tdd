@@ -2,15 +2,14 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "CMake: test",
+			"label": "MY CMake: test",
 			"detail": "Запуск тестов Cmake. Ctrl + Shift + U",
 			"type": "cmake",
 			"command": "test",
 			"preset": "All Test",
 			"problemMatcher": [
 				{
-					"owner": "cpp",
-					"source": "munit test",
+					"owner": "test",
 					"fileLocation": [
 						"autoDetect",
 						"${cwd}"
@@ -23,7 +22,18 @@
 					}
 				}
 			],
-			"group": "build",
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "silent",
+				"focus": true,
+				"panel": "dedicated",
+				"showReuseMessage": true,
+				"clear": false
+			},
 			"icon": {
 				"color": "terminal.ansiCyan",
 				"id": "beaker"
@@ -57,7 +67,6 @@
 	"inputs": [
 		{
 			"id": "INPUT_TARGET_NAME",
-			"descriptdetaion": "Если command:cmake.buildTargetName содержит [Targets In Preset], то заменить его на all",
 			"type": "command",
 			"command": "extension.commandvariable.transform",
 			"args": {
