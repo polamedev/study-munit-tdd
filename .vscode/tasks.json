@@ -8,20 +8,20 @@
 			"command": "test",
 			"preset": "All Test",
 			"problemMatcher": [
-				{
-					"owner": "test",
-					"source": "munit",
-					"fileLocation": [
-						"autoDetect",
-						"${cwd}"
-					],
-					"pattern": {
-						"regexp": "^Error: (.*):(\\d+):(.*)$",
-						"file": 1,
-						"line": 2,
-						"message": 3
-					}
-				}
+				// {
+				// 	"owner": "test",
+				// 	"source": "munit",
+				// 	"fileLocation": [
+				// 		"autoDetect",
+				// 		"${cwd}"
+				// 	],
+				// 	"pattern": {
+				// 		"regexp": "^Error: (.*):(\\d+):(.*)$",
+				// 		"file": 1,
+				// 		"line": 2,
+				// 		"message": 3
+				// 	}
+				// }
 			],
 			"group": {
 				"kind": "test",
@@ -30,9 +30,9 @@
 			"presentation": {
 				"echo": true,
 				"reveal": "silent",
-				"focus": true,
+				"focus": false,
 				"panel": "dedicated",
-				"showReuseMessage": true,
+				"showReuseMessage": false,
 				"clear": false
 			},
 			"icon": {
