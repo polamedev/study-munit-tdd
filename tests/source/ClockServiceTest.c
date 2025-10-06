@@ -48,6 +48,7 @@ static void *testSetup(const MunitParameter params[], void *user_data)
 {
     callbackCount = 0;
     ClockService_create();
+    MockMillisService_setMillis(0);
     return NULL;
 }
 static void testTearDown(void *fixture)
@@ -79,37 +80,31 @@ static MunitResult notEmptyAfterSchedule(const MunitParameter params[], void *us
 static MunitResult scheduleButItsNotTimeYet(const MunitParameter params[], void *user_data)
 {
     ClockService_schedule(testCallback, 100);
-
-    MockMillisService_setMillis(99);
     ClockService_call();
 
     munit_assert_int(callbackCount, ==, 0);
-
     return MUNIT_OK;
 }
 
-// static MunitResult scheduleAndItsTime(const MunitParameter params[], void *user_data)
-// {
-//     ClockService_schedule(testCallback, 100);
+static MunitResult scheduleAndItsTime(const MunitParameter params[], void *user_data)
+{
+    ClockService_schedule(testCallback, 100);
+    MockMillisService_setMillis(100);
+    ClockService_call();
 
-//     MockMillisService_setMillis(100);
-
-//     munit_assert_int(callbackCount, ==, 1);
-
-//     return MUNIT_OK;
-// }
+    munit_assert_int(callbackCount, ==, 1);
+    return MUNIT_OK;
+}
 
 static MunitTest clockServiceTests[] = {
-    {      "/emptyAfterCreate",       emptyAfterCreate, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    {"/notZeroSizeAfterCreate", notZeroSizeAfterCreate, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    { "/notEmptyAfterSchedule",  notEmptyAfterSchedule, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
-
-    {   "/scheduleButItsNotTimeYet",    scheduleButItsNotTimeYet, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    // {   "/scheduleButItsNotTimeYet",    scheduleAndItsTime, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {        "/emptyAfterCreate",         emptyAfterCreate, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {  "/notZeroSizeAfterCreate",   notZeroSizeAfterCreate, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {   "/notEmptyAfterSchedule",    notEmptyAfterSchedule, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {"/scheduleButItsNotTimeYet", scheduleButItsNotTimeYet, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {"/scheduleButItsNotTimeYet",       scheduleAndItsTime, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
 
     /* finalizer */
-
-    {  (char *)"no more tests",                   NULL, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {    (char *)"no more tests",                     NULL,      NULL,         NULL, MUNIT_TEST_OPTION_NONE, NULL},
 };
 
 static MunitSuite clockServiceTestSuite = {
