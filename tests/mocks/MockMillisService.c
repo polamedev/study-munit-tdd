@@ -1,6 +1,6 @@
 #include "MockMillisService.h"
 
-#include <MillisService.h>
+#include <MyLib/MillisService.h>
 
 /*
 Тестовый таргет будет использовать эту реализацию, а не реализацию из библиотеки

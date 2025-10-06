@@ -1,6 +1,6 @@
 // cppcheck-suppress-file syntaxError
 
-#include "CircularBuffer.h"
+#include <MyLib/CircularBuffer.h>
 
 #include <munit.h>
 

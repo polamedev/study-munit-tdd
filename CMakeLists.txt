@@ -22,8 +22,10 @@ endif()
 add_library(MyLib STATIC)
 
 target_include_directories(MyLib
-    PUBLIC
+    PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/MyLib>
+    INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 
 target_sources(MyLib
