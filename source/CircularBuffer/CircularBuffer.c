@@ -39,6 +39,7 @@ CircularBuffer CircularBuffer_create(int size)
 
 CircularBuffer CircularBuffer_bufferedCreate(char buf[], int size)
 {
+    (void) buf;
     return &staticCircularBuffer;
 }
 
@@ -92,4 +93,10 @@ int CircularBuffer_size(const CircularBuffer buffer)
 bool CircularBuffer_isEmpty(const CircularBuffer buffer)
 {
     return buffer->head == buffer->tail;
+}
+
+void CircularBuffer_print(const CircularBuffer buffer)
+{
+// TODO
+
 }

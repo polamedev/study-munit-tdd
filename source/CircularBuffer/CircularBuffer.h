@@ -16,3 +16,8 @@ int CircularBuffer_size(const CircularBuffer);
 
 bool CircularBuffer_isEmpty(const CircularBuffer);
 
+void CircularBuffer_print(const CircularBuffer);
+
+typedef void(*PrintFormatter)();
+void CircularBuffer_setPrintFormatter(CircularBuffer, PrintFormatter);
+// TODO
