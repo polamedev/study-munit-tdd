@@ -11,3 +11,7 @@ add_test(Test-CircularBuffer Test-CircularBuffer)
 add_executable(Test-TaskScheduleTest source/TaskScheduleTest.c $<TARGET_OBJECTS:Mock-MillisService>)
 target_link_libraries(Test-TaskScheduleTest munit code-lib)
 add_test(Test-TaskScheduleTest Test-TaskScheduleTest)
+
+add_executable(Test-FormatOutputSpy mocks/FormatOutputSpyTest.c)
+target_link_libraries(Test-FormatOutputSpy munit)
+add_test(Test-FormatOutputSpy Test-FormatOutputSpy)

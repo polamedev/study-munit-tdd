@@ -59,7 +59,8 @@
             "inherits": "debug",
             "targets": [
                 "Test-CircularBuffer",
-                "Test-TaskScheduleTest"
+                "Test-TaskScheduleTest",
+                "Test-FormatOutputSpy"
             ]
         },
         {
@@ -92,6 +93,15 @@
             "filter": {
                 "include": {
                     "name": "Test-TaskScheduleTest"
+                }
+            }
+        },
+        {
+            "name": "Test-FormatOutputSpy",
+            "configurePreset": "debug",
+            "filter": {
+                "include": {
+                    "name": "Test-FormatOutputSpy"
                 }
             }
         }
