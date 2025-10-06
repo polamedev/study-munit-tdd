@@ -24,14 +24,14 @@ add_library(code-lib STATIC)
 target_include_directories(code-lib
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source/CircularBuffer>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source/ClockService>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source/TaskSchedule>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source/MillisService>
 )
 
 target_sources(code-lib
     PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/source/CircularBuffer/CircularBuffer.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/source/ClockService/ClockService.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/TaskSchedule/TaskSchedule.c
 )
 
 add_executable(TDD

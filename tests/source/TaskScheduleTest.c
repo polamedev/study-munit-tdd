@@ -2,7 +2,7 @@
 
 /*
 
-    ClockService - модуль который запускает зарегистрированные колбеки, когда настало время
+    TaskSchedule - модуль который запускает зарегистрированные колбеки, когда настало время
 
     Функционал:
     - Регистрация колбеков с периодом вызова
@@ -13,8 +13,8 @@
     + Возврат максимального количества возможных регистраций
 
     тесты:
-    - Создание clockService
-    - Удаление clockService
+    - Создание taskSchedule
+    - Удаление taskSchedule
     - После создания
 
     - После создания не должно быть зарегистрированных колбеков
@@ -27,7 +27,7 @@
 
 */
 
-#include <ClockService.h>
+#include <TaskSchedule.h>
 
 #include "MockMillisService.h"
 
@@ -47,49 +47,49 @@ static void testCallback()
 static void *testSetup(const MunitParameter params[], void *user_data)
 {
     callbackCount = 0;
-    ClockService_create();
+    TaskSchedule_Create();
     MockMillisService_setMillis(0);
     return NULL;
 }
 static void testTearDown(void *fixture)
 {
-    ClockService_destroy();
+    TaskSchedule_Destroy();
 }
 
 ////////////////////////////////////////////////////////////////////
 
 static MunitResult emptyAfterCreate(const MunitParameter params[], void *user_data)
 {
-    munit_assert_int(ClockService_count(), ==, 0);
+    munit_assert_int(TaskSchedule_Count(), ==, 0);
     return MUNIT_OK;
 }
 
 static MunitResult notZeroSizeAfterCreate(const MunitParameter params[], void *user_data)
 {
-    munit_assert_int(ClockService_size(), !=, 0);
+    munit_assert_int(TaskSchedule_Size(), !=, 0);
     return MUNIT_OK;
 }
 
 static MunitResult notEmptyAfterSchedule(const MunitParameter params[], void *user_data)
 {
-    ClockService_schedule(testCallback, 100);
-    munit_assert_int(ClockService_count(), !=, 0);
+    TaskSchedule_Schedule(testCallback, 100);
+    munit_assert_int(TaskSchedule_Count(), !=, 0);
     return MUNIT_OK;
 }
 
 static MunitResult emptyAfterDestroy(const MunitParameter params[], void *user_data)
 {
-    ClockService_schedule(testCallback, 100);
-    ClockService_destroy();
+    TaskSchedule_Schedule(testCallback, 100);
+    TaskSchedule_Destroy();
 
-    munit_assert_int(ClockService_count(), ==, 0);
+    munit_assert_int(TaskSchedule_Count(), ==, 0);
     return MUNIT_OK;
 }
 
 static MunitResult scheduleButItsNotTimeYet(const MunitParameter params[], void *user_data)
 {
-    ClockService_schedule(testCallback, 100);
-    ClockService_call();
+    TaskSchedule_Schedule(testCallback, 100);
+    TaskSchedule_Call();
 
     munit_assert_int(callbackCount, ==, 0);
     return MUNIT_OK;
@@ -97,9 +97,9 @@ static MunitResult scheduleButItsNotTimeYet(const MunitParameter params[], void 
 
 static MunitResult scheduleAndItsTime(const MunitParameter params[], void *user_data)
 {
-    ClockService_schedule(testCallback, 100);
+    TaskSchedule_Schedule(testCallback, 100);
     MockMillisService_setMillis(100);
-    ClockService_call();
+    TaskSchedule_Call();
 
     munit_assert_int(callbackCount, ==, 1);
     return MUNIT_OK;
@@ -107,9 +107,9 @@ static MunitResult scheduleAndItsTime(const MunitParameter params[], void *user_
 
 static MunitResult schedule100msAndIts99msTime(const MunitParameter params[], void *user_data)
 {
-    ClockService_schedule(testCallback, 100);
+    TaskSchedule_Schedule(testCallback, 100);
     MockMillisService_setMillis(99);
-    ClockService_call();
+    TaskSchedule_Call();
 
     munit_assert_int(callbackCount, ==, 0);
     return MUNIT_OK;
@@ -117,9 +117,9 @@ static MunitResult schedule100msAndIts99msTime(const MunitParameter params[], vo
 
 static MunitResult schedule100msAndIts101msTime(const MunitParameter params[], void *user_data)
 {
-    ClockService_schedule(testCallback, 100);
+    TaskSchedule_Schedule(testCallback, 100);
     MockMillisService_setMillis(101);
-    ClockService_call();
+    TaskSchedule_Call();
 
     munit_assert_int(callbackCount, ==, 1);
     return MUNIT_OK;
@@ -127,9 +127,9 @@ static MunitResult schedule100msAndIts101msTime(const MunitParameter params[], v
 
 static MunitResult scheduleAndItsTooOverTime(const MunitParameter params[], void *user_data)
 {
-    ClockService_schedule(testCallback, 100);
+    TaskSchedule_Schedule(testCallback, 100);
     MockMillisService_setMillis(1000);
-    ClockService_call();
+    TaskSchedule_Call();
 
     munit_assert_int(callbackCount, ==, 1);
     return MUNIT_OK;
@@ -137,26 +137,26 @@ static MunitResult scheduleAndItsTooOverTime(const MunitParameter params[], void
 
 static MunitResult scheduleAndItsTimeTwice(const MunitParameter params[], void *user_data)
 {
-    ClockService_schedule(testCallback, 100);
+    TaskSchedule_Schedule(testCallback, 100);
     MockMillisService_setMillis(100);
-    ClockService_call();
+    TaskSchedule_Call();
     MockMillisService_setMillis(200);
-    ClockService_call();
+    TaskSchedule_Call();
     munit_assert_int(callbackCount, ==, 2);
     return MUNIT_OK;
 }
 
 static MunitResult scheduleTwiceAndItsTime(const MunitParameter params[], void *user_data)
 {
-    ClockService_schedule(testCallback, 100);
-    ClockService_schedule(testCallback, 100);
+    TaskSchedule_Schedule(testCallback, 100);
+    TaskSchedule_Schedule(testCallback, 100);
     MockMillisService_setMillis(100);
-    ClockService_call();
+    TaskSchedule_Call();
     munit_assert_int(callbackCount, ==, 2);
     return MUNIT_OK;
 }
 
-static MunitTest clockServiceTests[] = {
+static MunitTest taskScheduleTests[] = {
     {            "/emptyAfterCreate",             emptyAfterCreate, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
     {      "/notZeroSizeAfterCreate",       notZeroSizeAfterCreate, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
     {       "/notEmptyAfterSchedule",        notEmptyAfterSchedule, testSetup, testTearDown, MUNIT_TEST_OPTION_NONE, NULL},
@@ -173,7 +173,7 @@ static MunitTest clockServiceTests[] = {
     {        (char *)"no more tests",                         NULL,      NULL,         NULL, MUNIT_TEST_OPTION_NONE, NULL},
 };
 
-static MunitSuite clockServiceTestSuite = {
+static MunitSuite taskScheduleTestSuite = {
     /* This string will be prepended to all test names in this suite;
      * for example, "/example/rand" will become "/µnit/example/rand".
      * Note that, while it doesn't really matter for the top-level
@@ -181,7 +181,7 @@ static MunitSuite clockServiceTestSuite = {
      * an empty string ("") instead. */
     (char *)"",
     /* The first parameter is the array of test suites. */
-    clockServiceTests,
+    taskScheduleTests,
     /* In addition to containing test cases, suites can contain other
      * test suites.  This isn't necessary in this example, but it can be
      * a great help to projects with lots of tests by making it easier
@@ -201,12 +201,12 @@ static MunitSuite clockServiceTestSuite = {
 
 int main(int argc, char *argv[MUNIT_ARRAY_PARAM(argc + 1)])
 {
-    printf("--- ClockService Test ---\n");
+    printf("--- TaskSchedule Test ---\n");
     printf("Millis Lib: %s\n", MillisService_moduleInfo());
 
     /* Finally, we'll actually run our test suite!  That second argument
      * is the user_data parameter which will be passed either to the
      * test or (if provided) the fixture setup function. */
 
-    return munit_suite_main(&clockServiceTestSuite, (void *)"µnit", argc, argv);
+    return munit_suite_main(&taskScheduleTestSuite, (void *)"µnit", argc, argv);
 }

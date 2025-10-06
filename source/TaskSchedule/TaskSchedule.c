@@ -1,4 +1,4 @@
-#include "ClockService.h"
+#include "TaskSchedule.h"
 
 #include <MillisService.h>
 
@@ -7,7 +7,7 @@
 #define MAX_SCHEDULE_EVENTS 10
 
 typedef struct ScheduleEvent {
-    ScheduleCallback callback;
+    TaskSchedule_Func callback;
     unsigned         period;
     unsigned         startTime;
 } ScheduleEvent;
@@ -18,28 +18,28 @@ static struct {
     ScheduleEvent events[MAX_SCHEDULE_EVENTS];
 } clockSchedule;
 
-void ClockService_create()
+void TaskSchedule_Create()
 {
     memset(&clockSchedule, 0, sizeof(clockSchedule));
     clockSchedule.count = 0;
 }
 
-void ClockService_destroy()
+void TaskSchedule_Destroy()
 {
     clockSchedule.count = 0;
 }
 
-int ClockService_count()
+int TaskSchedule_Count()
 {
     return clockSchedule.count;
 }
 
-int ClockService_size()
+int TaskSchedule_Size()
 {
     return 10;
 }
 
-bool ClockService_schedule(ScheduleCallback callback, int mSecPeriod)
+bool TaskSchedule_Schedule(TaskSchedule_Func callback, int mSecPeriod)
 {
     clockSchedule.event.callback  = callback;
     clockSchedule.event.period    = mSecPeriod;
@@ -67,7 +67,7 @@ static void processEvent(ScheduleEvent *event)
     }
 }
 
-void ClockService_call()
+void TaskSchedule_Call()
 {
     for (int i = 0; i < clockSchedule.count; ++i)
     {

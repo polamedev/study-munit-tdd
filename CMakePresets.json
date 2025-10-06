@@ -59,7 +59,7 @@
             "inherits": "debug",
             "targets": [
                 "Test-CircularBuffer",
-                "Test-ClockServiceTest"
+                "Test-TaskScheduleTest"
             ]
         },
         {
@@ -87,11 +87,11 @@
         },
         {
             // Отдельный пресет тестов для CircularBuffer, добавил чтобы попробовать функционал нескольких персетов
-            "name": "Test-ClockServiceTest",
+            "name": "Test-TaskScheduleTest",
             "configurePreset": "debug",
             "filter": {
                 "include": {
-                    "name": "Test-ClockServiceTest"
+                    "name": "Test-TaskScheduleTest"
                 }
             }
         }
