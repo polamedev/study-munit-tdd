@@ -1,4 +1,4 @@
-#include "FormatOutputSpy.h"
+#include <FormatOutputSpy.h>
 
 #include <munit.h>
 #include <stdio.h>
