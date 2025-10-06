@@ -36,9 +36,32 @@ static MunitResult simplePrint(const MunitParameter params[], void *user_data)
 
 static MunitResult checkRetval(const MunitParameter params[], void *user_data)
 {
-    const char *out = "Hello world!";
-    int writeCount = FormatOutputSpy_print("Hello world!");
+    const char *out        = "Hello world!";
+    int         writeCount = FormatOutputSpy_print("Hello world!");
     munit_assert_int(strlen(out), ==, writeCount);
+    return MUNIT_OK;
+}
+
+static MunitResult multiplyPrint(const MunitParameter params[], void *user_data)
+{
+    const char *in1        = "One";
+    const char *in2        = "Two";
+    int         writeCount = 0;
+
+    writeCount += FormatOutputSpy_print(in1);
+    writeCount += FormatOutputSpy_print(in2);
+
+    munit_assert_string_equal(FormatOutputSpy_getOut(), "OneTwo");
+    munit_assert_int(strlen(in1) + strlen(in2), ==, writeCount);
+    return MUNIT_OK;
+}
+
+static MunitResult complexPrint(const MunitParameter params[], void *user_data)
+{
+    int writeCount = FormatOutputSpy_print("1 %i 2 %i 3 %i ", 1, 10, 100);
+
+    munit_assert_string_equal(FormatOutputSpy_getOut(), "1 1 2 10 3 100 ");
+    munit_assert_int(writeCount, ==, 15);
     return MUNIT_OK;
 }
 
@@ -46,6 +69,8 @@ static MunitTest tests[] = {
     {   "zeroOutAfterCreate", zeroOutAfterCreate, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
     {          "simplePrint",        simplePrint, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
     {          "checkRetval",        checkRetval, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {        "multiplyPrint",      multiplyPrint, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {         "complexPrint",       complexPrint, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
     /* finalizer */
     {(char *)"no more tests",               NULL,  NULL,     NULL, MUNIT_TEST_OPTION_NONE, NULL},
 };
