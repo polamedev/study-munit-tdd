@@ -1,19 +1,53 @@
+// cppcheck-suppress-file syntaxError
+
 #include <FormatOutputSpy.h>
 
 #include <munit.h>
 #include <stdio.h>
 
-static MunitResult test(const MunitParameter params[], void *user_data)
+static void *setup(const MunitParameter params[], void *user_data)
 {
     (void)user_data;
-    // return MUNIT_OK;
-    return MUNIT_FAIL;
+    FormatOutputSpy_create(200);
+    return NULL;
+}
+
+static void tearDown(void *fixture)
+{
+    (void)fixture;
+    FormatOutputSpy_destroy();
+}
+
+static MunitResult zeroOutAfterCreate(const MunitParameter params[], void *user_data)
+{
+    const char *str = FormatOutputSpy_getOut();
+    munit_assert_int(strlen(str), ==, 0);
+    return MUNIT_OK;
+}
+
+static MunitResult simplePrint(const MunitParameter params[], void *user_data)
+{
+    const char *out = "Hello world!";
+    FormatOutputSpy_print("Hello world!");
+    const char *str = FormatOutputSpy_getOut();
+    munit_assert_string_equal(out, str);
+    return MUNIT_OK;
+}
+
+static MunitResult checkRetval(const MunitParameter params[], void *user_data)
+{
+    const char *out = "Hello world!";
+    int writeCount = FormatOutputSpy_print("Hello world!");
+    munit_assert_int(strlen(out), ==, writeCount);
+    return MUNIT_OK;
 }
 
 static MunitTest tests[] = {
-    {                 "test", test, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {   "zeroOutAfterCreate", zeroOutAfterCreate, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {          "simplePrint",        simplePrint, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {          "checkRetval",        checkRetval, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
     /* finalizer */
-    {(char *)"no more tests", NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {(char *)"no more tests",               NULL,  NULL,     NULL, MUNIT_TEST_OPTION_NONE, NULL},
 };
 
 static MunitSuite testSuite = {
@@ -45,6 +79,12 @@ static MunitSuite testSuite = {
 int main(int argc, char *argv[MUNIT_ARRAY_PARAM(argc + 1)])
 {
     printf("--- FormatOutputSpy Test ---\n");
+
+    // int s1 = printf("");
+    // int s2 = printf("12345");
+    // int s3 = printf(NULL);
+
+    // printf("s1 = %i s2 = %i s3 = %i ", s1, s2, s3);
 
     /* Finally, we'll actually run our test suite!  That second argument
      * is the user_data parameter which will be passed either to the
