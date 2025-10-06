@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.13)
 project(
     tdd
     VERSION 1.0
-    DESCRIPTION "TDD"
+    DESCRIPTION "study-munit-TDD"
     # языки проекта, если не указать, будет принято, что проект на С и С++
     LANGUAGES C)
 
@@ -19,25 +19,23 @@ if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
 
-add_library(code-lib STATIC)
+add_library(MyLib STATIC)
 
-target_include_directories(code-lib
+target_include_directories(MyLib
     PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source/CircularBuffer>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source/TaskSchedule>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source/MillisService>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/MyLib>
 )
 
-target_sources(code-lib
+target_sources(MyLib
     PRIVATE 
-    ${CMAKE_CURRENT_SOURCE_DIR}/source/CircularBuffer/CircularBuffer.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/source/TaskSchedule/TaskSchedule.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/CircularBuffer.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/TaskSchedule.c
 )
 
-add_executable(TDD
-    ${CMAKE_CURRENT_SOURCE_DIR}/source/main.c
+add_executable(TDD-example
+    ${CMAKE_CURRENT_SOURCE_DIR}/example/main.c
 )
 
-target_link_libraries(TDD
+target_link_libraries(TDD-example
     munit
 )
