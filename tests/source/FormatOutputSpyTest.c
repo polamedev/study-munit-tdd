@@ -5,13 +5,13 @@
 
 static MunitResult test(const MunitParameter params[], void *user_data)
 {
-    (void) user_data;
+    (void)user_data;
     // return MUNIT_OK;
     return MUNIT_FAIL;
 }
 
 static MunitTest tests[] = {
-    {                "/test", test, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {                 "test", test, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
     /* finalizer */
     {(char *)"no more tests", NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
 };
