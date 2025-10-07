@@ -9,6 +9,13 @@ project(
     # языки проекта, если не указать, будет принято, что проект на С и С++
     LANGUAGES C)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+
+# Кажется не нужно, при выборе дебажной сборки добавляется флаг -g, его пока достаточно
+# add_compile_options("$<$<CONFIG:DEBUG>:-O0;-g3;-ggdb>")
+
+add_compile_definitions("$<$<CONFIG:DEBUG>:-DMUNIT_NO_FORK>")
+
 # Подключение CTest для тестирования, добавляет определение BUILD_TESTING
 include(CTest)
 
