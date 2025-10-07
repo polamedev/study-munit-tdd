@@ -1,5 +1,7 @@
 #include "CircularBuffer.h"
 
+#include "FormatOutput.h"
+
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,14 +9,13 @@
 struct CircularBuffer {
     char *buf;
     int   size;
-    int   head;
-    int   tail;
-    int   cnt;
+    int   head; // Индекс головы
+    int   tail; // Индекс хвоста
+    int   cnt;  // Число элементов в буфере
 };
 
-static char staticBuffer[10];
+static char           staticBuffer[10];
 struct CircularBuffer staticCircularBuffer;
-
 
 static void printPuffer(CircularBuffer buffer)
 {
@@ -30,16 +31,16 @@ static void printPuffer(CircularBuffer buffer)
 CircularBuffer CircularBuffer_create(int size)
 {
     CircularBuffer cb = calloc(sizeof(CircularBuffer), 1);
-    cb->size = size;
-    cb->head = 0;
-    cb->tail = 0;
-    cb->buf  = calloc(sizeof(char), size);
+    cb->size          = size;
+    cb->head          = 0;
+    cb->tail          = 0;
+    cb->buf           = calloc(sizeof(char), size);
     return cb;
 }
 
 CircularBuffer CircularBuffer_bufferedCreate(char buf[], int size)
 {
-    (void) buf;
+    (void)buf;
     return &staticCircularBuffer;
 }
 
@@ -97,6 +98,13 @@ bool CircularBuffer_isEmpty(const CircularBuffer buffer)
 
 void CircularBuffer_print(const CircularBuffer buffer)
 {
-// TODO
-
+    int i = buffer->head;
+    if (buffer->cnt == buffer->size) {
+        FormatOutput_print("%i, ", buffer->buf[i]);
+        nextIndex(&i, buffer->size);
+    }
+    for (; i != buffer->tail; nextIndex(&i, buffer->size)) {
+        FormatOutput_print("%i, ", buffer->buf[i]);
+    }
+    // FormatOutput_print
 }

@@ -286,13 +286,20 @@ static MunitResult checkCreationFewBuffer(const MunitParameter params[], void *u
     return MUNIT_OK;
 }
 
-static MunitResult checkBufferPrint(const MunitParameter params[], void *user_data)
+const char *testOutStr = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ";
+
+MunitResult checkBufferPrint(const MunitParameter params[], void *user_data)
 {
     // TODO
+    printf("--- Test-CircularBuffer ---\n");
     FormatOutputSpy_create(200);
     FormatOutput_setPrintFunction(FormatOutputSpy_vprint);
 
     CircularBuffer buffer = user_data;
+    CircularBuffer_print(buffer);
+    const char *out = FormatOutputSpy_getOut();
+
+    munit_assert_string_equal(out, testOutStr);
 
     FormatOutput_resetPrintFunction();
     FormatOutputSpy_destroy();
@@ -349,6 +356,8 @@ static MunitSuite testSuite = {
 
 int main(int argc, char *argv[MUNIT_ARRAY_PARAM(argc + 1)])
 {
+    printf("--- Test-CircularBuffer ---\n");
+    printf("--- Test-CircularBuffer ---\n");
     printf("--- Test-CircularBuffer ---\n");
 
     /* Finally, we'll actually run our test suite!  That second argument
