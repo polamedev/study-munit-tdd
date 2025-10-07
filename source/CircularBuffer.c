@@ -98,13 +98,20 @@ bool CircularBuffer_isEmpty(const CircularBuffer buffer)
 
 void CircularBuffer_print(const CircularBuffer buffer)
 {
-    int i = buffer->head;
-    if (buffer->cnt == buffer->size) {
-        FormatOutput_print("%i, ", buffer->buf[i]);
-        nextIndex(&i, buffer->size);
-    }
-    for (; i != buffer->tail; nextIndex(&i, buffer->size)) {
-        FormatOutput_print("%i, ", buffer->buf[i]);
-    }
+    static const int MAX_ITEM_NUMBER_IN_STRING = 5;
 
+    int i                  = buffer->head;
+    int itemNumberInString = 0;
+    FormatOutput_print("%i", buffer->buf[i]);
+    nextIndex(&i, buffer->size);
+    ++itemNumberInString;
+    for (; i != buffer->tail; nextIndex(&i, buffer->size), ++itemNumberInString) {
+        if (itemNumberInString < MAX_ITEM_NUMBER_IN_STRING) {
+            FormatOutput_print(" %i", buffer->buf[i]);
+        }
+        else {
+            FormatOutput_print("\n%i", buffer->buf[i]);
+            itemNumberInString = 0;
+        }
+    }
 }

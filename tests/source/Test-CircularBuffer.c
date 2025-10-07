@@ -286,7 +286,7 @@ static MunitResult checkCreationFewBuffer(const MunitParameter params[], void *u
     return MUNIT_OK;
 }
 
-const char *testOutStr = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ";
+const char *testOutStr = "1 2 3 4 5\n6 7 8 9 10";
 
 MunitResult checkBufferPrint(const MunitParameter params[], void *user_data)
 {
