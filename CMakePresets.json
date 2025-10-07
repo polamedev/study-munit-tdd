@@ -59,7 +59,7 @@
             "inherits": "debug",
             "targets": [
                 "Test-CircularBuffer",
-                "Test-TaskScheduleTest",
+                "Test-TaskSchedule",
                 "Test-FormatOutputSpy",
                 "Test-FormatOutput"
             ]
@@ -89,11 +89,11 @@
         },
         {
             // Отдельный пресет тестов для CircularBuffer, добавил чтобы попробовать функционал нескольких персетов
-            "name": "Test-TaskScheduleTest",
+            "name": "Test-TaskSchedule",
             "configurePreset": "debug",
             "filter": {
                 "include": {
-                    "name": "Test-TaskScheduleTest"
+                    "name": "Test-TaskSchedule"
                 }
             }
         },

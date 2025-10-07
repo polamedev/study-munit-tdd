@@ -9,15 +9,15 @@ add_library(Mock-FormatOutputSpy OBJECT mocks/FormatOutputSpy.c)
 target_include_directories(Mock-FormatOutputSpy INTERFACE mocks)
 
 
-add_executable(Test-CircularBuffer source/CircularBufferTest.c)
+add_executable(Test-CircularBuffer source/Test-CircularBuffer.c)
 target_link_libraries(Test-CircularBuffer munit MyLib)
 add_test(Test-CircularBuffer Test-CircularBuffer)
 
-add_executable(Test-TaskScheduleTest source/TaskScheduleTest.c)
-target_link_libraries(Test-TaskScheduleTest munit MyLib Mock-MillisService)
-add_test(Test-TaskScheduleTest Test-TaskScheduleTest)
+add_executable(Test-TaskSchedule source/Test-TaskSchedule.c)
+target_link_libraries(Test-TaskSchedule munit MyLib Mock-MillisService)
+add_test(Test-TaskSchedule Test-TaskSchedule)
 
-add_executable(Test-FormatOutputSpy source/FormatOutputSpyTest.c)
+add_executable(Test-FormatOutputSpy source/Test-FormatOutputSpy.c)
 target_link_libraries(Test-FormatOutputSpy munit Mock-FormatOutputSpy)
 add_test(Test-FormatOutputSpy Test-FormatOutputSpy)
 
