@@ -26,27 +26,18 @@ void FormatOutputSpy_destroy()
 
 int FormatOutputSpy_print(const char *format, ...)
 {
-    int     written_size;
     va_list arguments;
     va_start(arguments, format);
-    written_size = vsnprintf(&self.str[self.writeSize],
-                             self.size, format, arguments);
-
+    int written_size = FormatOutputSpy_vprint(format, arguments);
     va_end(arguments);
-
-    self.writeSize += written_size;
 
     return written_size;
 }
 
 int FormatOutputSpy_vprint(const char *format, va_list arguments)
 {
-    int written_size;
-
-    written_size = vsnprintf(&self.str[self.writeSize],
-                             self.size, format, arguments);
-
-    self.writeSize += written_size;
+    int written_size  = vsnprintf(&self.str[self.writeSize], self.size, format, arguments);
+    self.writeSize   += written_size;
     return written_size;
 }
 
