@@ -22,7 +22,7 @@ int FormatOutput_vprint(const char *format, va_list va)
     return self.printFunction(format, va);
 }
 
-void FormatOutput_setPrintFunction(int (*printFunction)(const char *fmt, va_list va))
+void FormatOutput_setPrintFunction(int (*printFunction)(const char *format, va_list arguments))
 {
     self.printFunction = printFunction;
 }

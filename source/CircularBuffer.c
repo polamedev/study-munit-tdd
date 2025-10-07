@@ -106,5 +106,5 @@ void CircularBuffer_print(const CircularBuffer buffer)
     for (; i != buffer->tail; nextIndex(&i, buffer->size)) {
         FormatOutput_print("%i, ", buffer->buf[i]);
     }
-    // FormatOutput_print
+
 }
