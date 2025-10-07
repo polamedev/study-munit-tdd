@@ -11,10 +11,9 @@
 
 static MunitResult test(const MunitParameter params[], void *user_data)
 {
-    (void) user_data;
+    (void)user_data;
     return MUNIT_OK;
 }
-
 
 int call_count = 0;
 int testPrint(const char *fmt, va_list va)
@@ -33,19 +32,19 @@ static MunitResult zeroCallWithoutSetting(const MunitParameter params[], void *u
 {
     FormatOutput_print("");
 
-    munit_assert_int(call_count, ==,  0);
+    munit_assert_int(call_count, ==, 0);
 
     return MUNIT_OK;
 }
 
 static MunitResult testSetFormatFunction(const MunitParameter params[], void *user_data)
 {
-    (void) user_data;
+    (void)user_data;
 
     FormatOutput_setPrintFunction(testPrint);
     FormatOutput_print("");
 
-    munit_assert_int(call_count, ==,  1);
+    munit_assert_int(call_count, ==, 1);
 
     return MUNIT_OK;
 }
@@ -56,16 +55,41 @@ static MunitResult zeroCallAfterReset(const MunitParameter params[], void *user_
     FormatOutput_resetPrintFunction();
     FormatOutput_print("");
 
-    munit_assert_int(call_count, ==,  0);
+    munit_assert_int(call_count, ==, 0);
+}
+
+static MunitResult vprintfZeroCallWithoutSetting(const MunitParameter params[], void *user_data)
+{
+    va_list arg = {};
+    FormatOutput_vprint("", arg);
+
+    munit_assert_int(call_count, ==, 0);
+
+    return MUNIT_OK;
+}
+
+static MunitResult vprintfOneCallWithSetting(const MunitParameter params[], void *user_data)
+{
+    (void)user_data;
+
+    FormatOutput_setPrintFunction(testPrint);
+    va_list arg = {};
+    FormatOutput_vprint("", arg);
+
+    munit_assert_int(call_count, ==, 1);
+
+    return MUNIT_OK;
 }
 
 static MunitTest tests[] = {
-    {"test", test, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-    {"test Set Format Function", zeroCallWithoutSetting, setup, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-    {"test Set Format Function", testSetFormatFunction, setup, NULL, MUNIT_TEST_OPTION_NONE, NULL},
-    {"test Set Format Function", zeroCallAfterReset, setup, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {                         "test",                          test,  NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {     "test Set Format Function",        zeroCallWithoutSetting, setup, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {        "testSetFormatFunction",         testSetFormatFunction, setup, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {           "zeroCallAfterReset",            zeroCallAfterReset, setup, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {"vprintfZeroCallWithoutSetting", vprintfZeroCallWithoutSetting, setup, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {    "vprintfOneCallWithSetting",     vprintfOneCallWithSetting, setup, NULL, MUNIT_TEST_OPTION_NONE, NULL},
     /* finalizer */
-    {     "no more tests", NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {                "no more tests",                          NULL,  NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL},
 };
 
 static MunitSuite testSuite = {"", tests, NULL, 1, MUNIT_SUITE_OPTION_NONE};

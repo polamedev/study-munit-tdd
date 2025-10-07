@@ -17,6 +17,11 @@ int FormatOutput_print(const char *format, ...)
     return written_size;
 }
 
+int FormatOutput_vprint(const char *format, va_list va)
+{
+    return self.printFunction(format, va);
+}
+
 void FormatOutput_setPrintFunction(int (*printFunction)(const char *fmt, va_list va))
 {
     self.printFunction = printFunction;
