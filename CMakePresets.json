@@ -60,7 +60,8 @@
             "targets": [
                 "Test-CircularBuffer",
                 "Test-TaskScheduleTest",
-                "Test-FormatOutputSpy"
+                "Test-FormatOutputSpy",
+                "Test-FormatOutput"
             ]
         },
         {
