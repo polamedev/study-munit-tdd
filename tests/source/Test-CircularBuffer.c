@@ -74,15 +74,6 @@ static int sprintBuff(char *s, char *buf, int size)
         }                                                   \
     }
 
-static void *setupBufferWithElements(const MunitParameter params[], void *user_data)
-{
-    CircularBuffer buffer = CircularBuffer_create(10);
-    char           in[10];
-    increaseFillBuf(in, sizeof(in), 1);
-    putBuff(buffer, in, sizeof(in));
-    return buffer;
-}
-
 static void *setup(const MunitParameter params[], void *user_data)
 {
     CircularBuffer buffer = CircularBuffer_create(10);
@@ -286,43 +277,76 @@ static MunitResult checkCreationFewBuffer(const MunitParameter params[], void *u
     return MUNIT_OK;
 }
 
-const char *testOutStr = "1 2 3 4 5\n6 7 8 9 10";
-
-MunitResult checkBufferPrint(const MunitParameter params[], void *user_data)
+static void *formattedSetup(const MunitParameter params[], void *user_data)
 {
+    CircularBuffer buffer = CircularBuffer_create(20);
     FormatOutputSpy_create(200);
     FormatOutput_setPrintFunction(FormatOutputSpy_vprint);
 
+    return buffer;
+}
+
+static void formattedTearDown(void *fixture)
+{
+    FormatOutput_resetPrintFunction();
+    FormatOutputSpy_destroy();
+
+    CircularBuffer buffer = (CircularBuffer)fixture;
+    CircularBuffer_destroy(buffer);
+}
+
+MunitResult checkBufferPrint(const MunitParameter params[], void *user_data)
+{
     CircularBuffer buffer = user_data;
+
+    char in[10];
+    increaseFillBuf(in, sizeof(in), 1);
+    putBuff(buffer, in, sizeof(in));
+    CircularBuffer_put(buffer, 0);
+    CircularBuffer_put(buffer, 0);
+
     CircularBuffer_print(buffer);
     const char *out = FormatOutputSpy_getOut();
 
-    munit_assert_string_equal(out, testOutStr);
+    static const char *compare = "1   2   3   4   5\n6   7   8   9  10\n0   0";
+    munit_assert_string_equal(out, compare);
 
-    FormatOutput_resetPrintFunction();
-    FormatOutputSpy_destroy();
+    return MUNIT_OK;
+}
+
+MunitResult bufferPrint2(const MunitParameter params[], void *user_data)
+{
+    CircularBuffer buffer = user_data;
+
+    static const char in[] = {1, 2, 3, 250, 1, 2, 3};
+    putBuff(buffer, in, sizeof(in));
+
+    CircularBuffer_print(buffer);
+    const char *out = FormatOutputSpy_getOut();
+
+    munit_assert_string_equal(out, "compare");
 
     return MUNIT_OK;
 }
 
 static MunitTest tests[] = {
-    {      "emptyAfterCreate",           emptyAfterCreate,                   setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    {      "notEmptyAfterPut",           notEmptyAfterPut,                   setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    {  "putAndGetCharIsEqual",       putAndGetCharIsEqual,                   setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    {   "putAndGetSecondChar", putAndGetSecondCharIsEqual,                   setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    {  "checkOverWriteBuffer",       checkOverWriteBuffer,                   setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    {            "checkCount",           checkCountBuffer,                   setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    {             "checkSize",                  checkSize,                    NULL,     NULL, MUNIT_TEST_OPTION_NONE, NULL},
-    {        "checkFullWrite",             checkFullWrite,                   setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    { "checkReadOverWriteBuf",      checkReadOverWriteBuf,                   setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    {"checkCreationBigBuffer",     checkCreationBigBuffer,                    NULL,     NULL, MUNIT_TEST_OPTION_NONE, NULL},
-    {"checkCreationFewBuffer",     checkCreationFewBuffer,                    NULL,     NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {      "emptyAfterCreate",           emptyAfterCreate,          setup,          tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {      "notEmptyAfterPut",           notEmptyAfterPut,          setup,          tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {  "putAndGetCharIsEqual",       putAndGetCharIsEqual,          setup,          tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {   "putAndGetSecondChar", putAndGetSecondCharIsEqual,          setup,          tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {  "checkOverWriteBuffer",       checkOverWriteBuffer,          setup,          tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {            "checkCount",           checkCountBuffer,          setup,          tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {             "checkSize",                  checkSize,           NULL,              NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {        "checkFullWrite",             checkFullWrite,          setup,          tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    { "checkReadOverWriteBuf",      checkReadOverWriteBuf,          setup,          tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {"checkCreationBigBuffer",     checkCreationBigBuffer,           NULL,              NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {"checkCreationFewBuffer",     checkCreationFewBuffer,           NULL,              NULL, MUNIT_TEST_OPTION_NONE, NULL},
 
     /* print */
-    {           "bufferPrint",           checkBufferPrint, setupBufferWithElements, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {           "bufferPrint",           checkBufferPrint, formattedSetup, formattedTearDown, MUNIT_TEST_OPTION_NONE, NULL},
 
     /* finalizer */
-    {         "no more tests",                       NULL,                    NULL,     NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {         "no more tests",                       NULL,           NULL,              NULL, MUNIT_TEST_OPTION_NONE, NULL},
 };
 
 static MunitSuite testSuite = {

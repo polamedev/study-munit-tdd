@@ -96,21 +96,43 @@ bool CircularBuffer_isEmpty(const CircularBuffer buffer)
     return buffer->head == buffer->tail;
 }
 
+static void printWhiteSpaces(int whiteNumber)
+{
+    for (int i = 0; i < whiteNumber; ++i) {
+        FormatOutput_print(" ");
+    }
+}
+
+static int getDigitalNumber(int number)
+{
+    int i = 0;
+
+    while (number = number / 10)
+    {
+        i++;
+    }
+    return i;
+}
+
 void CircularBuffer_print(const CircularBuffer buffer)
 {
     static const int MAX_ITEM_NUMBER_IN_STRING = 5;
 
-    int i                  = buffer->head;
+    int i                  = buffer->tail;
     int itemNumberInString = 0;
     FormatOutput_print("%i", buffer->buf[i]);
     nextIndex(&i, buffer->size);
     ++itemNumberInString;
-    for (; i != buffer->tail; nextIndex(&i, buffer->size), ++itemNumberInString) {
+    for (; i != buffer->head; nextIndex(&i, buffer->size), ++itemNumberInString) {
+        char number = buffer->buf[i];
+
         if (itemNumberInString < MAX_ITEM_NUMBER_IN_STRING) {
-            FormatOutput_print(" %i", buffer->buf[i]);
+            int digitNum = getDigitalNumber(number);
+            printWhiteSpaces(3 - digitNum);
+            FormatOutput_print("%i", number);
         }
         else {
-            FormatOutput_print("\n%i", buffer->buf[i]);
+            FormatOutput_print("\n%i", number);
             itemNumberInString = 0;
         }
     }
