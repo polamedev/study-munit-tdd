@@ -39,6 +39,17 @@ int FormatOutputSpy_print(const char *format, ...)
     return written_size;
 }
 
+int FormatOutputSpy_vprint(const char *format, va_list arguments)
+{
+    int written_size;
+
+    written_size = vsnprintf(&self.str[self.writeSize],
+                             self.size, format, arguments);
+
+    self.writeSize += written_size;
+    return written_size;
+}
+
 const char *FormatOutputSpy_getOut()
 {
     return self.str;

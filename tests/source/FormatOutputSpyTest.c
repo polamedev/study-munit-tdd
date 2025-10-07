@@ -65,14 +65,51 @@ static MunitResult complexPrint(const MunitParameter params[], void *user_data)
     return MUNIT_OK;
 }
 
+static MunitResult vprintSimpleTest(const MunitParameter params[], void *user_data)
+{
+    const char *out = "Hello world!";
+    va_list     args;
+    FormatOutputSpy_vprint(out, args);
+    const char *str = FormatOutputSpy_getOut();
+    munit_assert_string_equal(out, str);
+    return MUNIT_OK;
+}
+
+static MunitResult vprintCheckRetval(const MunitParameter params[], void *user_data)
+{
+    const char *out = "Hello world!";
+    va_list     args;
+    int         writeCount = FormatOutputSpy_vprint(out, args);
+    munit_assert_int(strlen(out), ==, writeCount);
+    return MUNIT_OK;
+}
+
+static MunitResult vprintMultiplyPrint(const MunitParameter params[], void *user_data)
+{
+    const char *in1        = "One";
+    const char *in2        = "Two";
+    int         writeCount = 0;
+    va_list     args;
+
+    writeCount += FormatOutputSpy_vprint(in1, args);
+    writeCount += FormatOutputSpy_vprint(in2, args);
+
+    munit_assert_string_equal(FormatOutputSpy_getOut(), "OneTwo");
+    munit_assert_int(strlen(in1) + strlen(in2), ==, writeCount);
+    return MUNIT_OK;
+}
+
 static MunitTest tests[] = {
-    {   "zeroOutAfterCreate", zeroOutAfterCreate, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    {          "simplePrint",        simplePrint, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    {          "checkRetval",        checkRetval, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    {        "multiplyPrint",      multiplyPrint, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    {         "complexPrint",       complexPrint, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {   "zeroOutAfterCreate",  zeroOutAfterCreate, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {          "simplePrint",         simplePrint, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {          "checkRetval",         checkRetval, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {        "multiplyPrint",       multiplyPrint, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {         "complexPrint",        complexPrint, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {     "vprintSimpleTest",    vprintSimpleTest, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {    "vprintCheckRetval",   vprintCheckRetval, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {  "vprintMultiplyPrint", vprintMultiplyPrint, setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
     /* finalizer */
-    {(char *)"no more tests",               NULL,  NULL,     NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {(char *)"no more tests",                NULL,  NULL,     NULL, MUNIT_TEST_OPTION_NONE, NULL},
 };
 
 static MunitSuite testSuite = {
