@@ -24,6 +24,7 @@ add_library(MyLib STATIC)
 target_include_directories(MyLib
     PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/MyLib>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
@@ -32,6 +33,7 @@ target_sources(MyLib
     PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/source/CircularBuffer.c
     ${CMAKE_CURRENT_SOURCE_DIR}/source/TaskSchedule.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/FormatOutput.c
 )
 
 add_executable(TDD-example

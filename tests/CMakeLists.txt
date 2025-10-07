@@ -22,5 +22,5 @@ target_link_libraries(Test-FormatOutputSpy munit Mock-FormatOutputSpy)
 add_test(Test-FormatOutputSpy Test-FormatOutputSpy)
 
 add_executable(Test-FormatOutput source/Test-FormatOutput.c)
-target_link_libraries(Test-FormatOutput munit)
+target_link_libraries(Test-FormatOutput munit MyLib)
 add_test(Test-FormatOutput Test-FormatOutput)
