@@ -10,7 +10,7 @@ target_include_directories(Mock-FormatOutputSpy INTERFACE mocks)
 
 
 add_executable(Test-CircularBuffer source/Test-CircularBuffer.c)
-target_link_libraries(Test-CircularBuffer munit MyLib)
+target_link_libraries(Test-CircularBuffer munit MyLib Mock-FormatOutputSpy)
 add_test(Test-CircularBuffer Test-CircularBuffer)
 
 add_executable(Test-TaskSchedule source/Test-TaskSchedule.c)

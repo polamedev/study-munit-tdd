@@ -1,6 +1,9 @@
 // cppcheck-suppress-file syntaxError
 
 #include <MyLib/CircularBuffer.h>
+#include <MyLib/FormatOutput.h>
+
+#include <FormatOutputSpy.h>
 
 #include <munit.h>
 
@@ -80,13 +83,13 @@ static void *setupBufferWithElements(const MunitParameter params[], void *user_d
     return buffer;
 }
 
-static void *circularBufferSetup(const MunitParameter params[], void *user_data)
+static void *setup(const MunitParameter params[], void *user_data)
 {
     CircularBuffer buffer = CircularBuffer_create(10);
     return buffer;
 }
 
-static void circularBufferTearDown(void *fixture)
+static void tearDown(void *fixture)
 {
     CircularBuffer buffer = (CircularBuffer)fixture;
     CircularBuffer_destroy(buffer);
@@ -286,39 +289,47 @@ static MunitResult checkCreationFewBuffer(const MunitParameter params[], void *u
 static MunitResult checkBufferPrint(const MunitParameter params[], void *user_data)
 {
     // TODO
+    FormatOutputSpy_create(200);
+    FormatOutput_setPrintFunction(FormatOutputSpy_vprint);
+
     CircularBuffer buffer = user_data;
+
+    FormatOutput_resetPrintFunction();
+    FormatOutputSpy_destroy();
+
+    return MUNIT_OK;
 }
 
-static MunitTest circularBufferTests[] = {
-    {      "/emptyAfterCreate",           emptyAfterCreate,     circularBufferSetup, circularBufferTearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    {      "/notEmptyAfterPut",           notEmptyAfterPut,     circularBufferSetup, circularBufferTearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    {  "/putAndGetCharIsEqual",       putAndGetCharIsEqual,     circularBufferSetup, circularBufferTearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    {   "/putAndGetSecondChar", putAndGetSecondCharIsEqual,     circularBufferSetup, circularBufferTearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    {  "/checkOverWriteBuffer",       checkOverWriteBuffer,     circularBufferSetup, circularBufferTearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    {            "/checkCount",           checkCountBuffer,     circularBufferSetup, circularBufferTearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    {             "/checkSize",                  checkSize,                    NULL,                   NULL, MUNIT_TEST_OPTION_NONE, NULL},
-    {        "/checkFullWrite",             checkFullWrite,     circularBufferSetup, circularBufferTearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    { "/checkReadOverWriteBuf",      checkReadOverWriteBuf,     circularBufferSetup, circularBufferTearDown, MUNIT_TEST_OPTION_NONE, NULL},
-    {"/checkCreationBigBuffer",     checkCreationBigBuffer,                    NULL,                   NULL, MUNIT_TEST_OPTION_NONE, NULL},
-    {"/checkCreationFewBuffer",     checkCreationFewBuffer,                    NULL,                   NULL, MUNIT_TEST_OPTION_NONE, NULL},
+static MunitTest tests[] = {
+    {      "emptyAfterCreate",           emptyAfterCreate,                   setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {      "notEmptyAfterPut",           notEmptyAfterPut,                   setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {  "putAndGetCharIsEqual",       putAndGetCharIsEqual,                   setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {   "putAndGetSecondChar", putAndGetSecondCharIsEqual,                   setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {  "checkOverWriteBuffer",       checkOverWriteBuffer,                   setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {            "checkCount",           checkCountBuffer,                   setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {             "checkSize",                  checkSize,                    NULL,     NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {        "checkFullWrite",             checkFullWrite,                   setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    { "checkReadOverWriteBuf",      checkReadOverWriteBuf,                   setup, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {"checkCreationBigBuffer",     checkCreationBigBuffer,                    NULL,     NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {"checkCreationFewBuffer",     checkCreationFewBuffer,                    NULL,     NULL, MUNIT_TEST_OPTION_NONE, NULL},
 
     /* print */
-    {      "/checkBufferPrint",           checkBufferPrint, setupBufferWithElements, circularBufferTearDown, MUNIT_TEST_OPTION_NONE, NULL},
+    {           "bufferPrint",           checkBufferPrint, setupBufferWithElements, tearDown, MUNIT_TEST_OPTION_NONE, NULL},
 
     /* finalizer */
 
-    {  (char *)"no more tests",                       NULL,                    NULL,                   NULL, MUNIT_TEST_OPTION_NONE, NULL},
+    {         "no more tests",                       NULL,                    NULL,     NULL, MUNIT_TEST_OPTION_NONE, NULL},
 };
 
-static MunitSuite circularBufferTestSuite = {
+static MunitSuite testSuite = {
     /* This string will be prepended to all test names in this suite;
      * for example, "/example/rand" will become "/µnit/example/rand".
      * Note that, while it doesn't really matter for the top-level
      * suite, NULL signal the end of an array of tests; you should use
      * an empty string ("") instead. */
-    (char *)"/CircularBuffer",
+    "",
     /* The first parameter is the array of test suites. */
-    circularBufferTests,
+    tests,
     /* In addition to containing test cases, suites can contain other
      * test suites.  This isn't necessary in this example, but it can be
      * a great help to projects with lots of tests by making it easier
@@ -338,9 +349,11 @@ static MunitSuite circularBufferTestSuite = {
 
 int main(int argc, char *argv[MUNIT_ARRAY_PARAM(argc + 1)])
 {
+    printf("--- Test-CircularBuffer ---\n");
+
     /* Finally, we'll actually run our test suite!  That second argument
      * is the user_data parameter which will be passed either to the
      * test or (if provided) the fixture setup function. */
 
-    return munit_suite_main(&circularBufferTestSuite, (void *)"µnit", argc, argv);
+    return munit_suite_main(&testSuite, (void *)"µnit", argc, argv);
 }
