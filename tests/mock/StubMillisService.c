@@ -1,4 +1,4 @@
-#include "MockMillisService.h"
+#include "StubMillisService.h"
 
 #include <MyLib/MillisService.h>
 
@@ -21,7 +21,7 @@ const char *MillisService_moduleInfo()
     return "MOCK Millis Service module";
 }
 
-void MockMillisService_setMillis(uint32_t msec)
+void StubMillisService_setMillis(uint32_t msec)
 {
     mock_msec = msec;
 }

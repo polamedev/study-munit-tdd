@@ -3,7 +3,7 @@
 #include <MyLib/CircularBuffer.h>
 #include <MyLib/FormatOutput.h>
 
-#include <FormatOutputSpy.h>
+#include <SpyFormatOutput.h>
 
 #include <munit.h>
 
@@ -280,8 +280,8 @@ static MunitResult checkCreationFewBuffer(const MunitParameter params[], void *u
 static void *formattedSetup(const MunitParameter params[], void *user_data)
 {
     CircularBuffer buffer = CircularBuffer_create(20);
-    FormatOutputSpy_create(200);
-    FormatOutput_setPrintFunction(FormatOutputSpy_vprint);
+    SpyFormatOutput_create(200);
+    FormatOutput_setPrintFunction(SpyFormatOutput_vprint);
 
     return buffer;
 }
@@ -289,7 +289,7 @@ static void *formattedSetup(const MunitParameter params[], void *user_data)
 static void formattedTearDown(void *fixture)
 {
     FormatOutput_resetPrintFunction();
-    FormatOutputSpy_destroy();
+    SpyFormatOutput_destroy();
 
     CircularBuffer buffer = (CircularBuffer)fixture;
     CircularBuffer_destroy(buffer);
@@ -306,7 +306,7 @@ MunitResult checkBufferPrint(const MunitParameter params[], void *user_data)
     CircularBuffer_put(buffer, 0);
 
     CircularBuffer_print(buffer);
-    const char *out = FormatOutputSpy_getOut();
+    const char *out = SpyFormatOutput_getOut();
 
     static const char *compare = "1   2   3   4   5\n6   7   8   9  10\n0   0";
     munit_assert_string_equal(out, compare);
@@ -322,7 +322,7 @@ MunitResult bufferPrint2(const MunitParameter params[], void *user_data)
     putBuff(buffer, in, sizeof(in));
 
     CircularBuffer_print(buffer);
-    const char *out = FormatOutputSpy_getOut();
+    const char *out = SpyFormatOutput_getOut();
 
     munit_assert_string_equal(out, "compare");
 

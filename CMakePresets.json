@@ -60,7 +60,7 @@
             "targets": [
                 "Test-CircularBuffer",
                 "Test-TaskSchedule",
-                "Test-FormatOutputSpy",
+                "Test-SpyFormatOutput",
                 "Test-FormatOutput"
             ]
         },
@@ -98,11 +98,11 @@
             }
         },
         {
-            "name": "Test-FormatOutputSpy",
+            "name": "Test-SpyFormatOutput",
             "configurePreset": "debug",
             "filter": {
                 "include": {
-                    "name": "Test-FormatOutputSpy"
+                    "name": "Test-SpyFormatOutput"
                 }
             }
         }

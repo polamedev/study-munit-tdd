@@ -29,7 +29,7 @@
 
 #include <MyLib/TaskSchedule.h>
 
-#include <MockMillisService.h>
+#include <StubMillisService.h>
 
 #include <munit.h>
 
@@ -48,7 +48,7 @@ static void *testSetup(const MunitParameter params[], void *user_data)
 {
     callbackCount = 0;
     TaskSchedule_Create();
-    MockMillisService_setMillis(0);
+    StubMillisService_setMillis(0);
     return NULL;
 }
 static void testTearDown(void *fixture)
@@ -98,7 +98,7 @@ static MunitResult scheduleButItsNotTimeYet(const MunitParameter params[], void 
 static MunitResult scheduleAndItsTime(const MunitParameter params[], void *user_data)
 {
     TaskSchedule_Schedule(testCallback, 100);
-    MockMillisService_setMillis(100);
+    StubMillisService_setMillis(100);
     TaskSchedule_Call();
 
     munit_assert_int(callbackCount, ==, 1);
@@ -108,7 +108,7 @@ static MunitResult scheduleAndItsTime(const MunitParameter params[], void *user_
 static MunitResult schedule100msAndIts99msTime(const MunitParameter params[], void *user_data)
 {
     TaskSchedule_Schedule(testCallback, 100);
-    MockMillisService_setMillis(99);
+    StubMillisService_setMillis(99);
     TaskSchedule_Call();
 
     munit_assert_int(callbackCount, ==, 0);
@@ -118,7 +118,7 @@ static MunitResult schedule100msAndIts99msTime(const MunitParameter params[], vo
 static MunitResult schedule100msAndIts101msTime(const MunitParameter params[], void *user_data)
 {
     TaskSchedule_Schedule(testCallback, 100);
-    MockMillisService_setMillis(101);
+    StubMillisService_setMillis(101);
     TaskSchedule_Call();
 
     munit_assert_int(callbackCount, ==, 1);
@@ -128,7 +128,7 @@ static MunitResult schedule100msAndIts101msTime(const MunitParameter params[], v
 static MunitResult scheduleAndItsTooOverTime(const MunitParameter params[], void *user_data)
 {
     TaskSchedule_Schedule(testCallback, 100);
-    MockMillisService_setMillis(1000);
+    StubMillisService_setMillis(1000);
     TaskSchedule_Call();
 
     munit_assert_int(callbackCount, ==, 1);
@@ -138,9 +138,9 @@ static MunitResult scheduleAndItsTooOverTime(const MunitParameter params[], void
 static MunitResult scheduleAndItsTimeTwice(const MunitParameter params[], void *user_data)
 {
     TaskSchedule_Schedule(testCallback, 100);
-    MockMillisService_setMillis(100);
+    StubMillisService_setMillis(100);
     TaskSchedule_Call();
-    MockMillisService_setMillis(200);
+    StubMillisService_setMillis(200);
     TaskSchedule_Call();
     munit_assert_int(callbackCount, ==, 2);
     return MUNIT_OK;
@@ -150,7 +150,7 @@ static MunitResult scheduleTwiceAndItsTime(const MunitParameter params[], void *
 {
     TaskSchedule_Schedule(testCallback, 100);
     TaskSchedule_Schedule(testCallback, 100);
-    MockMillisService_setMillis(100);
+    StubMillisService_setMillis(100);
     TaskSchedule_Call();
     munit_assert_int(callbackCount, ==, 2);
     return MUNIT_OK;
