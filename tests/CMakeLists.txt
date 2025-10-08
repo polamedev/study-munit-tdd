@@ -1,12 +1,12 @@
 
 # Определяем mock в качестве объектной библиотеки
-add_library(Mock-MillisService OBJECT mocks/MockMillisService.c)
-target_include_directories(Mock-MillisService INTERFACE mocks)
+add_library(Mock-MillisService OBJECT mock/MockMillisService.c)
+target_include_directories(Mock-MillisService INTERFACE mock)
 target_link_libraries(Mock-MillisService PUBLIC MyLib)
 
 
-add_library(Mock-FormatOutputSpy OBJECT mocks/FormatOutputSpy.c)
-target_include_directories(Mock-FormatOutputSpy INTERFACE mocks)
+add_library(Mock-FormatOutputSpy OBJECT mock/FormatOutputSpy.c)
+target_include_directories(Mock-FormatOutputSpy INTERFACE mock)
 
 
 add_executable(Test-CircularBuffer source/Test-CircularBuffer.c)
