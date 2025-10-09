@@ -35,6 +35,7 @@ void setup()
 {
     address = 0xfeed;
     data    = 0x1dea;
+    mock().strictOrder();
 }
 
 void teardown()
