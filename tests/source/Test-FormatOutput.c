@@ -11,25 +11,36 @@
 
 static MunitResult test(const MunitParameter params[], void *user_data)
 {
+    (void)params;
     (void)user_data;
+
     return MUNIT_OK;
 }
 
 int call_count = 0;
 int testPrint(const char *fmt, va_list va)
 {
+    (void)fmt;
+    (void)va;
+
     call_count++;
     return 0;
-};
+}
 
 static void *setup(const MunitParameter params[], void *user_data)
 {
+    (void)params;
+    (void)user_data;
+
     call_count = 0;
     return NULL;
 }
 
 static MunitResult zeroCallWithoutSetting(const MunitParameter params[], void *user_data)
 {
+    (void)params;
+    (void)user_data;
+
     FormatOutput_print("");
 
     munit_assert_int(call_count, ==, 0);
@@ -39,6 +50,7 @@ static MunitResult zeroCallWithoutSetting(const MunitParameter params[], void *u
 
 static MunitResult testSetFormatFunction(const MunitParameter params[], void *user_data)
 {
+    (void)params;
     (void)user_data;
 
     FormatOutput_setPrintFunction(testPrint);
@@ -51,16 +63,24 @@ static MunitResult testSetFormatFunction(const MunitParameter params[], void *us
 
 static MunitResult zeroCallAfterReset(const MunitParameter params[], void *user_data)
 {
+    (void)params;
+    (void)user_data;
+
     FormatOutput_setPrintFunction(testPrint);
     FormatOutput_resetPrintFunction();
     FormatOutput_print("");
 
     munit_assert_int(call_count, ==, 0);
+    
+    return MUNIT_OK;
 }
 
 static MunitResult vprintfZeroCallWithoutSetting(const MunitParameter params[], void *user_data)
 {
-    va_list arg = {};
+    (void)params;
+    (void)user_data;
+
+    va_list arg = {0};
     FormatOutput_vprint("", arg);
 
     munit_assert_int(call_count, ==, 0);
@@ -70,10 +90,11 @@ static MunitResult vprintfZeroCallWithoutSetting(const MunitParameter params[], 
 
 static MunitResult vprintfOneCallWithSetting(const MunitParameter params[], void *user_data)
 {
+    (void)params;
     (void)user_data;
 
     FormatOutput_setPrintFunction(testPrint);
-    va_list arg = {};
+    va_list arg = {0};
     FormatOutput_vprint("", arg);
 
     munit_assert_int(call_count, ==, 1);

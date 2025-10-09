@@ -7,7 +7,7 @@ project(
     VERSION 1.0
     DESCRIPTION "study-munit-TDD"
     # языки проекта, если не указать, будет принято, что проект на С и С++
-    LANGUAGES C)
+)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 

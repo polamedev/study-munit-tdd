@@ -29,3 +29,7 @@ add_test(Test-SpyFormatOutput Test-SpyFormatOutput)
 add_executable(Test-FormatOutput source/Test-FormatOutput.c)
 target_link_libraries(Test-FormatOutput munit MyLib)
 add_test(Test-FormatOutput Test-FormatOutput)
+
+add_executable(Test-MockIO source/Test-MockIO.cpp)
+target_link_libraries(Test-MockIO MyLib CppUTest::CppUTest CppUTest::CppUTestExt)
+add_test(Test-MockIO Test-MockIO)

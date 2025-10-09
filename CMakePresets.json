@@ -61,7 +61,8 @@
                 "Test-CircularBuffer",
                 "Test-TaskSchedule",
                 "Test-SpyFormatOutput",
-                "Test-FormatOutput"
+                "Test-FormatOutput",
+                "Test-MockIO"
             ]
         },
         {
