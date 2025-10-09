@@ -1,9 +1,7 @@
 
 #pragma once
 
-#include <MyLib/IO.h>
+#include <CppUTest/SimpleString.h>
 
-
-
-void MockIO_create(const char *scope);
+void MockIO_create(const SimpleString &mockName);
 void MockIO_destroy();

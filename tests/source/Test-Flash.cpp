@@ -18,6 +18,8 @@
 
 #include "FakeMicroTime.h"
 
+#include "MockIO.hpp"
+
 #include <MyLib/Flash.h>
 #include <MyLib/IO.h>
 #include <MyLib/m28w160ect.h>
@@ -28,47 +30,52 @@
 
 // START: TEST_GROUP2
 TEST_GROUP(Flash) {
-ioAddress address;
-ioData    data;
-    // MockSupport ioMock = {"ioMock"}
+ioAddress          address;
+ioData             data;
+const SimpleString ioMock = "";
 
 void setup()
 {
+    // MockIO_create(ioMock);
+
     address = 0xfeed;
     data    = 0x1dea;
-    mock().strictOrder();
+    mock(ioMock).strictOrder();
 }
 
 void teardown()
 {
-    mock().checkExpectations();
-    mock().clear();
+
+    mock(ioMock).checkExpectations();
+    mock(ioMock).clear();
+    // MockIO_destroy();
+
 }
 
 // START: helpers
 void expectCommand(ioData command)
 {
-    mock().expectOneCall("IO_Write").withParameter("addr", CommandRegister).withParameter("data", command);
+    mock(ioMock).expectOneCall("IO_Write").withParameter("addr", CommandRegister).withParameter("data", command);
 }
 
 void expectWriteData()
 {
-    mock().expectOneCall("IO_Write").withParameter("addr", (int)address).withParameter("data", data);
+    mock(ioMock).expectOneCall("IO_Write").withParameter("addr", (int)address).withParameter("data", data);
 }
 
 void simulateDeviceStatus(ioData status)
 {
-    mock().expectOneCall("IO_Read").withParameter("addr", StatusRegister).andReturnValue((int)status);
+    mock(ioMock).expectOneCall("IO_Read").withParameter("addr", StatusRegister).andReturnValue((int)status);
 }
 
 void simulateDeviceStatusWithRepeat(ioData status, int repeatCount)
 {
-    mock().expectNCalls(repeatCount, "IO_Read").withParameter("addr", StatusRegister).andReturnValue((int)status);
+    mock(ioMock).expectNCalls(repeatCount, "IO_Read").withParameter("addr", StatusRegister).andReturnValue((int)status);
 }
 
 void simulateReadback(ioData data)
 {
-    mock().expectOneCall("IO_Read").withParameter("addr", (int)address).andReturnValue((int)data);
+    mock(ioMock).expectOneCall("IO_Read").withParameter("addr", (int)address).andReturnValue((int)data);
 }
 // END: helpers
 
@@ -235,8 +242,8 @@ TEST_GROUP(Flash)
 
     void teardown()
     {
-        mock().checkExpectations();
-        mock().clear();
+        mock(ioMock).checkExpectations();
+        mock(ioMock).clear();
     }
 };
 #endif // END: TEST_GROUP1
@@ -244,17 +251,17 @@ TEST_GROUP(Flash)
 #if 0  // START: WriteSucceedsReadyImmediately1
 TEST(Flash, WriteSucceeds_Immediately)
 {
-    mock().expectOneCall("IO_Write")
+    mock(ioMock).expectOneCall("IO_Write")
             .withParameter("addr", CommandRegister)
             .withParameter("value", ProgramCommand);
-    mock().expectOneCall("IO_Write")
+    mock(ioMock).expectOneCall("IO_Write")
             .withParameter("addr", (int) address)
             .withParameter("value", data);
 			
-    mock().expectOneCall("IO_Read")
+    mock(ioMock).expectOneCall("IO_Read")
             .withParameter("addr", StatusRegister)
             .andReturnValue((int) ReadyBit);
-    mock().expectOneCall("IO_Read")
+    mock(ioMock).expectOneCall("IO_Read")
             .withParameter("addr", (int) address)
             .andReturnValue((int) data);
 
