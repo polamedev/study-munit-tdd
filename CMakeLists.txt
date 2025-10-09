@@ -13,6 +13,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 # Кажется не нужно, при выборе дебажной сборки добавляется флаг -g, его пока достаточно
 # add_compile_options("$<$<CONFIG:DEBUG>:-O0;-g3;-ggdb>")
+add_compile_options("-Wall;-Wextra;-pedantic")
+# add_compile_options("-O3;-lto")
+# add_compile_options("-v")
 
 add_compile_definitions("$<$<CONFIG:DEBUG>:-DMUNIT_NO_FORK>")
 
