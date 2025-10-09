@@ -14,19 +14,8 @@ struct CircularBuffer {
     int   cnt;  // Число элементов в буфере
 };
 
-static char           staticBuffer[10];
 struct CircularBuffer staticCircularBuffer;
 
-static void printPuffer(CircularBuffer buffer)
-{
-    printf("size = %i; count = %i; ", buffer->size, buffer->cnt);
-
-    for (int i = 0; i < buffer->size; ++i)
-    {
-        printf("%i ", buffer->buf[i]);
-    }
-    printf("\n");
-}
 
 CircularBuffer CircularBuffer_create(int size)
 {
@@ -41,6 +30,7 @@ CircularBuffer CircularBuffer_create(int size)
 CircularBuffer CircularBuffer_bufferedCreate(char buf[], int size)
 {
     (void)buf;
+    (void)size;
     return &staticCircularBuffer;
 }
 
@@ -107,7 +97,7 @@ static int getDigitalNumber(int number)
 {
     int i = 0;
 
-    while (number = number / 10)
+    while ((number = number / 10) != 0)
     {
         i++;
     }
