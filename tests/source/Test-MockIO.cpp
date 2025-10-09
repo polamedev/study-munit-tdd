@@ -33,6 +33,7 @@ TEST(MockIO, ExceptRead)
     /* Задаем ожидание вызова функции IO_Read с параметром "addr" и возвращаемым значение data */
     mock()
         .expectOneCall("IO_Read")
+        .withParameter("addr", addr)
         .andReturnValue((int)data);
 
     ioData result = IO_Read(addr);
