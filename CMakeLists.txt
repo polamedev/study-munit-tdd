@@ -11,6 +11,8 @@ project(
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
+find_package(CppUTest REQUIRED)
+
 # Кажется не нужно, при выборе дебажной сборки добавляется флаг -g, его пока достаточно
 # add_compile_options("$<$<CONFIG:DEBUG>:-O0;-g3;-ggdb>")
 add_compile_options("-Wall;-Wextra;-pedantic")
