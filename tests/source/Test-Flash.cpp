@@ -30,6 +30,7 @@
 TEST_GROUP(Flash) {
 ioAddress address;
 ioData    data;
+    // MockSupport ioMock = {"ioMock"}
 
 void setup()
 {

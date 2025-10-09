@@ -24,9 +24,13 @@
 /*-    www.renaissancesoftware.net james@renaissancesoftware.net       -*/
 /*- ------------------------------------------------------------------ -*/
 
-#ifndef D_IO_H
-#define D_IO_H
+#pragma once
+
 #include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef uint32_t ioAddress;
 typedef uint16_t ioData;
@@ -34,5 +38,7 @@ typedef uint16_t ioData;
 ioData IO_Read(ioAddress addr);
 void   IO_Write(ioAddress addr, ioData data);
 
+#ifdef __cplusplus
+}
 #endif
 

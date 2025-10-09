@@ -5,7 +5,7 @@ target_include_directories(Mock-MillisService INTERFACE mock)
 target_link_libraries(Mock-MillisService PUBLIC MyLib)
 
 # Объектная библиотека мока модуля MyLib/IO с использованием CppUTest
-add_library(Mock-MockIO OBJECT mock/MockIO.c)
+add_library(Mock-MockIO OBJECT mock/MockIO.cpp)
 target_include_directories(Mock-MockIO INTERFACE mock)
 target_link_libraries(Mock-MockIO PUBLIC MyLib CppUTest::CppUTestExt)
 
