@@ -8,9 +8,9 @@
 #include <CppUTestExt/MockSupport_c.h>
 #include <MyLib/IO.h>
 
-void IO_Write(ioAddress addr, ioData value)
+void IO_Write(ioAddress addr, ioData data)
 {
-    mock_c()->actualCall("IO_Write")->withIntParameters("addr", addr)->withIntParameters("value", value);
+    mock_c()->actualCall("IO_Write")->withIntParameters("addr", addr)->withIntParameters("data", data);
 }
 
 ioData IO_Read(ioAddress addr)
