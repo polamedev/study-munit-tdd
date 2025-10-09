@@ -9,6 +9,12 @@ add_library(Mock-MockIO OBJECT mock/MockIO.c)
 target_include_directories(Mock-MockIO INTERFACE mock)
 target_link_libraries(Mock-MockIO PUBLIC MyLib CppUTest::CppUTestExt)
 
+# Объектная библиотека фейка microtime
+add_library(Mock-FakeMicroTime OBJECT mock/FakeMicroTime.c)
+target_include_directories(Mock-FakeMicroTime INTERFACE mock)
+target_link_libraries(Mock-FakeMicroTime PUBLIC MyLib)
+
+
 
 add_library(Mock-SpyFormatOutput OBJECT mock/SpyFormatOutput.c)
 target_include_directories(Mock-SpyFormatOutput INTERFACE mock)
