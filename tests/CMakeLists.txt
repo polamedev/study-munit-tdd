@@ -39,3 +39,7 @@ add_test(Test-FormatOutput Test-FormatOutput)
 add_executable(Test-MockIO source/Test-MockIO.cpp)
 target_link_libraries(Test-MockIO MyLib Mock-MockIO CppUTest::CppUTest CppUTest::CppUTestExt)
 add_test(Test-MockIO Test-MockIO)
+
+add_executable(Test-FakeMicroTime source/Test-FakeMicroTime.cpp)
+target_link_libraries(Test-FakeMicroTime MyLib Mock-FakeMicroTime CppUTest::CppUTest CppUTest::CppUTestExt)
+add_test(Test-FakeMicroTime Test-FakeMicroTime)
