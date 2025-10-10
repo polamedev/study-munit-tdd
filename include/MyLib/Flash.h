@@ -34,6 +34,7 @@ extern "C" {
 
 typedef enum {
     FLASH_SUCCESS = 0,
+    FLASH_ERROR,
     FLASH_VPP_ERROR,
     FLASH_PROGRAM_ERROR,
     FLASH_PROTECTED_BLOCK_ERROR,

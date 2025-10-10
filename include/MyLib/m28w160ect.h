@@ -49,11 +49,15 @@ typedef enum {
 } StatusRegisterBits;
 
 typedef enum {
-    Flash_Cfi_ManufacturerCode_Address = 0x00,
-    Flash_Cfi_ManufacturerCode_Data    = 0x0020,
-
-    Flash_Cfi_Qry1_Add  = 0x10,
-    Flash_Cfi_Qry1_Data = 0x51,
-
+    Flash_Cfi_ManufacturerCode_Add  = 0x00,
+    Flash_Cfi_ManufacturerCode_Data = 0x0020,
+    Flash_Cfi_DeviceCode_Add        = 0x01,
+    Flash_Cfi_DeviceCode_Data       = 0x88CE,
+    Flash_Cfi_Qry1_Add              = 0x10,
+    Flash_Cfi_Qry1_Data             = 0x52,
+    Flash_Cfi_Qry2_Add              = 0x11,
+    Flash_Cfi_Qry2_Data             = 0x52,
+    Flash_Cfi_Qry3_Add              = 0x12,
+    Flash_Cfi_Qry3_Data             = 0x59,
 } Flash_Cfi;
 

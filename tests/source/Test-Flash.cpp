@@ -213,15 +213,38 @@ TEST(Flash, WriteFails_TimeoutAtEndOfTime)
 
 TEST(Flash, ReadCfi)
 {
+    MockIO_teardown();
+    MockIO_setup("ioMock", true);
+
     expectCommand(ReadCfiQuery);
     MockIO_expectRead(Flash_Cfi_Qry1_Add, Flash_Cfi_Qry1_Data);
+    MockIO_expectRead(Flash_Cfi_Qry2_Add, Flash_Cfi_Qry2_Data);
+    MockIO_expectRead(Flash_Cfi_Qry3_Add, Flash_Cfi_Qry3_Data);
+    MockIO_expectRead(Flash_Cfi_DeviceCode_Add, Flash_Cfi_DeviceCode_Data);
     expectCommand(Reset);
 
     ioData      data   = 0;
-    FlashStatus result = Flash_ReadCfi(Flash_Cfi_Qry1_Add, &data);
+    FlashStatus result = Flash_ReadCfi(Flash_Cfi_DeviceCode_Add, &data);
 
     LONGS_EQUAL(result, FLASH_SUCCESS);
-    LONGS_EQUAL(data, Flash_Cfi_Qry1_Data);
+    LONGS_EQUAL(data, Flash_Cfi_DeviceCode_Data);
+}
+
+TEST(Flash, ErrorCfi)
+{
+    MockIO_teardown();
+    MockIO_setup("ioMock", true);
+
+    expectCommand(ReadCfiQuery);
+    MockIO_expectRead(Flash_Cfi_Qry1_Add, 1);
+    MockIO_expectRead(Flash_Cfi_Qry2_Add, 2);
+    MockIO_expectRead(Flash_Cfi_Qry3_Add, 3);
+    expectCommand(Reset);
+
+    ioData      data   = 0;
+    FlashStatus result = Flash_ReadCfi(Flash_Cfi_DeviceCode_Add, &data);
+
+    LONGS_EQUAL(result, FLASH_ERROR);
 }
 
 int main(int argc, char **argv)

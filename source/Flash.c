@@ -93,6 +93,15 @@ FlashStatus Flash_ReadCfi(ioAddress offset, ioData *cfi)
 {
     IO_Write(CommandRegister, ReadCfiQuery);
 
+    ioData qry1 = IO_Read(Flash_Cfi_Qry1_Add);
+    ioData qry2 = IO_Read(Flash_Cfi_Qry2_Add);
+    ioData qry3 = IO_Read(Flash_Cfi_Qry3_Add);
+
+    if (qry1 != Flash_Cfi_Qry1_Data || qry2 != Flash_Cfi_Qry2_Data || qry3 != Flash_Cfi_Qry3_Data) {
+        resetFlash();
+        return FLASH_ERROR;
+    }
+
     *cfi = IO_Read(offset);
 
     resetFlash();
