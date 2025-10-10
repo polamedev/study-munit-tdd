@@ -3,5 +3,5 @@
 
 #include <CppUTest/SimpleString.h>
 
-void MockIO_create(const SimpleString &mockName);
-void MockIO_destroy();
+void MockIO_setName(const SimpleString &mockName);
+void MockIO_resetName();

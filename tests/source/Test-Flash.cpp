@@ -32,50 +32,50 @@
 TEST_GROUP(Flash) {
 ioAddress          address;
 ioData             data;
-const SimpleString ioMock = "";
+const SimpleString ioMockName = "ioMock";
 
 void setup()
 {
-    // MockIO_create(ioMock);
+    MockIO_setName(ioMockName);
 
     address = 0xfeed;
     data    = 0x1dea;
-    mock(ioMock).strictOrder();
+    mock(ioMockName).strictOrder();
 }
 
 void teardown()
 {
 
-    mock(ioMock).checkExpectations();
-    mock(ioMock).clear();
-    // MockIO_destroy();
+    mock(ioMockName).checkExpectations();
+    mock().clear();
 
+    MockIO_resetName();
 }
 
 // START: helpers
 void expectCommand(ioData command)
 {
-    mock(ioMock).expectOneCall("IO_Write").withParameter("addr", CommandRegister).withParameter("data", command);
+    mock(ioMockName).expectOneCall("IO_Write").withParameter("addr", CommandRegister).withParameter("data", command);
 }
 
 void expectWriteData()
 {
-    mock(ioMock).expectOneCall("IO_Write").withParameter("addr", (int)address).withParameter("data", data);
+    mock(ioMockName).expectOneCall("IO_Write").withParameter("addr", (int)address).withParameter("data", data);
 }
 
 void simulateDeviceStatus(ioData status)
 {
-    mock(ioMock).expectOneCall("IO_Read").withParameter("addr", StatusRegister).andReturnValue((int)status);
+    mock(ioMockName).expectOneCall("IO_Read").withParameter("addr", StatusRegister).andReturnValue((int)status);
 }
 
 void simulateDeviceStatusWithRepeat(ioData status, int repeatCount)
 {
-    mock(ioMock).expectNCalls(repeatCount, "IO_Read").withParameter("addr", StatusRegister).andReturnValue((int)status);
+    mock(ioMockName).expectNCalls(repeatCount, "IO_Read").withParameter("addr", StatusRegister).andReturnValue((int)status);
 }
 
 void simulateReadback(ioData data)
 {
-    mock(ioMock).expectOneCall("IO_Read").withParameter("addr", (int)address).andReturnValue((int)data);
+    mock(ioMockName).expectOneCall("IO_Read").withParameter("addr", (int)address).andReturnValue((int)data);
 }
 // END: helpers
 
