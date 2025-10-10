@@ -15,8 +15,8 @@ extern "C" {
 int FormatOutput_print(const char *format, ...);
 int FormatOutput_vprint(const char *format, va_list va);
 
-void FormatOutput_setPrintFunction(int (*printFunction)(const char *format, va_list arguments));
-void FormatOutput_resetPrintFunction();
+void FormatOutput_setVPrintFunction(int (*printFunction)(const char *format, va_list arguments));
+void FormatOutput_resetVPrintFunction();
 
 #ifdef __cplusplus
 }

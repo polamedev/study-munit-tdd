@@ -281,14 +281,14 @@ static void *formattedSetup(const MunitParameter params[], void *user_data)
 {
     CircularBuffer buffer = CircularBuffer_create(20);
     SpyFormatOutput_create(200);
-    FormatOutput_setPrintFunction(SpyFormatOutput_vprint);
+    FormatOutput_setVPrintFunction(SpyFormatOutput_vprint);
 
     return buffer;
 }
 
 static void formattedTearDown(void *fixture)
 {
-    FormatOutput_resetPrintFunction();
+    FormatOutput_resetVPrintFunction();
     SpyFormatOutput_destroy();
 
     CircularBuffer buffer = (CircularBuffer)fixture;

@@ -53,7 +53,7 @@ static MunitResult testSetFormatFunction(const MunitParameter params[], void *us
     (void)params;
     (void)user_data;
 
-    FormatOutput_setPrintFunction(testPrint);
+    FormatOutput_setVPrintFunction(testPrint);
     FormatOutput_print("");
 
     munit_assert_int(call_count, ==, 1);
@@ -66,12 +66,12 @@ static MunitResult zeroCallAfterReset(const MunitParameter params[], void *user_
     (void)params;
     (void)user_data;
 
-    FormatOutput_setPrintFunction(testPrint);
-    FormatOutput_resetPrintFunction();
+    FormatOutput_setVPrintFunction(testPrint);
+    FormatOutput_resetVPrintFunction();
     FormatOutput_print("");
 
     munit_assert_int(call_count, ==, 0);
-    
+
     return MUNIT_OK;
 }
 
@@ -93,7 +93,7 @@ static MunitResult vprintfOneCallWithSetting(const MunitParameter params[], void
     (void)params;
     (void)user_data;
 
-    FormatOutput_setPrintFunction(testPrint);
+    FormatOutput_setVPrintFunction(testPrint);
     va_list arg = {0};
     FormatOutput_vprint("", arg);
 

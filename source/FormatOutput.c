@@ -22,12 +22,12 @@ int FormatOutput_vprint(const char *format, va_list va)
     return self.printFunction(format, va);
 }
 
-void FormatOutput_setPrintFunction(int (*printFunction)(const char *format, va_list arguments))
+void FormatOutput_setVPrintFunction(int (*printFunction)(const char *format, va_list arguments))
 {
     self.printFunction = printFunction;
 }
 
-void FormatOutput_resetPrintFunction()
+void FormatOutput_resetVPrintFunction()
 {
     self.printFunction = vprintf;
 }
