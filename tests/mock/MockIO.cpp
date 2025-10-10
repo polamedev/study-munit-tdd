@@ -32,12 +32,16 @@ ioData IO_Read(ioAddress addr)
 }
 }
 
-void MockIO_setMockName(const SimpleString &mockName)
+void MockIO_setup(const SimpleString &mockName, bool strictOrder)
 {
     ::mockName = mockName;
+
+    if (strictOrder) {
+        mock(mockName).strictOrder();
+    }
 }
 
-void MockIO_resetMockName()
+void MockIO_teardown()
 {
     mockName = "";
 }

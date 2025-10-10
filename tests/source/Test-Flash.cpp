@@ -26,30 +26,29 @@
 
 #include <CppUTest/CommandLineTestRunner.h>
 #include <CppUTest/TestHarness.h>
-#include <CppUTestExt/MockSupport.h>
+#include <CppUTest/TestRegistry.h>
+#include <CppUTestExt/MockSupportPlugin.h>
 
 // START: TEST_GROUP2
 TEST_GROUP(Flash) {
-ioAddress          address;
-ioData             data;
-const SimpleString ioMockName = "ioMock";
+ioAddress address;
+ioData    data;
 
 void setup()
 {
-    MockIO_setMockName(ioMockName);
+    MockIO_setup("ioMock", true);
 
     address = 0xfeed;
     data    = 0x1dea;
-    mock(ioMockName).strictOrder();
 }
 
 void teardown()
 {
+    MockIO_teardown();
 
-    MockIO_checkExpectations();
-    mock().clear();
-
-    MockIO_resetMockName();
+    // При использовании плагина нижнее вызывается автоматически
+    // mock().checkExpectations();
+    // mock().clear();
 }
 
 // START: helpers
@@ -229,5 +228,11 @@ TEST(Flash, WriteFails_TimeoutAtEndOfTime)
 
 int main(int argc, char **argv)
 {
+    MockSupportPlugin mockPlugin;
+
+    // Подключаем плагин mockSupport
+    // Что позволит не вызывать mock().clear(); и mock().checkExpectations
+    TestRegistry::getCurrentRegistry()->installPlugin(&mockPlugin);
+
     return RUN_ALL_TESTS(argc, argv);
 }
