@@ -76,12 +76,9 @@ void simulateReadback(ioData data)
 {
     MockIO_expectRead(address, data);
 }
-// END: helpers
 
 }; // TEST_GROUP(Flash)
-// END: TEST_GROUP2
 
-// START: WriteSucceedsReadyImmediately2
 TEST(Flash, WriteSucceeds_ReadyImmediately)
 {
     expectCommand(ProgramCommand);
@@ -93,9 +90,7 @@ TEST(Flash, WriteSucceeds_ReadyImmediately)
 
     LONGS_EQUAL(FLASH_SUCCESS, result);
 }
-// END: WriteSucceedsReadyImmediately2
 
-// START: ProgramSucceedsNotImmediatelyReady
 TEST(Flash, WriteSucceeds_NotReadyImmediately)
 {
     expectCommand(ProgramCommand);
@@ -108,9 +103,7 @@ TEST(Flash, WriteSucceeds_NotReadyImmediately)
 
     LONGS_EQUAL(FLASH_SUCCESS, result);
 }
-// END: ProgramSucceedsNotImmediatelyReady
 
-// START: WriteFails_VppError
 TEST(Flash, WriteFails_VppError)
 {
     expectCommand(ProgramCommand);
@@ -122,9 +115,7 @@ TEST(Flash, WriteFails_VppError)
 
     LONGS_EQUAL(FLASH_VPP_ERROR, result);
 }
-// END: WriteFails_VppError
 
-// START: WriteFails_ProgramError
 TEST(Flash, WriteFails_ProgramError)
 {
     expectCommand(ProgramCommand);
@@ -136,9 +127,7 @@ TEST(Flash, WriteFails_ProgramError)
 
     LONGS_EQUAL(FLASH_PROGRAM_ERROR, result);
 }
-// END: WriteFails_ProgramError
 
-// START: WriteFails_ProtectedBlockError
 TEST(Flash, WriteFails_ProtectedBlockError)
 {
     expectCommand(ProgramCommand);
@@ -150,9 +139,7 @@ TEST(Flash, WriteFails_ProtectedBlockError)
 
     LONGS_EQUAL(FLASH_PROTECTED_BLOCK_ERROR, result);
 }
-// END: WriteFails_ProtectedBlockError
 
-// START: WriteFails_FlashUnknownProgramError
 TEST(Flash, WriteFails_FlashUnknownProgramError)
 {
     expectCommand(ProgramCommand);
@@ -164,9 +151,7 @@ TEST(Flash, WriteFails_FlashUnknownProgramError)
 
     LONGS_EQUAL(FLASH_UNKNOWN_PROGRAM_ERROR, result);
 }
-// END: WriteFails_FlashUnknownProgramError
 
-// START: WriteFails_FlashReadBackError
 TEST(Flash, WriteFails_FlashReadBackError)
 {
     expectCommand(ProgramCommand);
@@ -178,9 +163,7 @@ TEST(Flash, WriteFails_FlashReadBackError)
 
     LONGS_EQUAL(FLASH_READ_BACK_ERROR, result);
 }
-// END: WriteFails_FlashReadBackError
 
-// START: WriteSucceeds_IgnoresOtherBitsUntilReady
 TEST(Flash, WriteSucceeds_IgnoresOtherBitsUntilReady)
 {
     expectCommand(ProgramCommand);
@@ -193,9 +176,7 @@ TEST(Flash, WriteSucceeds_IgnoresOtherBitsUntilReady)
 
     LONGS_EQUAL(FLASH_SUCCESS, result);
 }
-// END: WriteSucceeds_IgnoresOtherBitsUntilReady
 
-// START: WriteFails_Timeout_1
 TEST(Flash, WriteFails_Timeout)
 {
     FakeMicroTime_Init(0, 500);
@@ -208,9 +189,7 @@ TEST(Flash, WriteFails_Timeout)
 
     LONGS_EQUAL(FLASH_TIMEOUT_ERROR, result);
 }
-// END: WriteFails_Timeout_1
 
-// START: WriteFails_TimeoutAtEndOfTime
 TEST(Flash, WriteFails_TimeoutAtEndOfTime)
 {
     FakeMicroTime_Init(0xffffffff, 500);
@@ -224,7 +203,6 @@ TEST(Flash, WriteFails_TimeoutAtEndOfTime)
 
     LONGS_EQUAL(FLASH_TIMEOUT_ERROR, result);
 }
-// END: WriteFails_TimeoutAtEndOfTime
 
 int main(int argc, char **argv)
 {
