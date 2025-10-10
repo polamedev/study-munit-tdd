@@ -15,7 +15,12 @@ find_package(CppUTest REQUIRED)
 
 # Кажется не нужно, при выборе дебажной сборки добавляется флаг -g, его пока достаточно
 # add_compile_options("$<$<CONFIG:DEBUG>:-O0;-g3;-ggdb>")
-add_compile_options("-Wall;-Wextra;-pedantic")
+add_compile_options("-Wall;-pedantic")
+add_compile_options("-Wextra")
+# Ошибка -Wextra добавляет ошибку о неиспользуемых параметрах функций  и неиспользуемых функциях, 
+# Эти предупреждения не очень полезны, предлагаю их отключить 
+add_compile_options("-Wno-unused-function;-Wno-unused-parameter")
+
 # add_compile_options("-O3;-lto")
 # add_compile_options("-v")
 

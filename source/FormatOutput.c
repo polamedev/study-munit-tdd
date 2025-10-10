@@ -12,7 +12,7 @@ int FormatOutput_print(const char *format, ...)
 {
     va_list arguments;
     va_start(arguments, format);
-    int written_size = self.printFunction(format, arguments);
+    int written_size = FormatOutput_vprint(format, arguments);
     va_end(arguments);
     return written_size;
 }

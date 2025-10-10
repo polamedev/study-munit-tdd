@@ -29,6 +29,7 @@ static char *increaseFillBuf(char *buf, int fill_size, char start_val)
         buf[i] = start_val;
         start_val++;
     }
+    return buf;
 }
 
 static void putBuff(CircularBuffer cb, const char *putBuf, int size)
@@ -114,7 +115,7 @@ static MunitResult putAndGetCharIsEqual(const MunitParameter params[], void *use
     char get;
     get = CircularBuffer_get(buffer);
 
-    munit_assert_char(put, ==, 'a');
+    munit_assert_char(get, ==, 'a');
     return MUNIT_OK;
 }
 
@@ -318,7 +319,7 @@ MunitResult bufferPrint2(const MunitParameter params[], void *user_data)
 {
     CircularBuffer buffer = user_data;
 
-    static const char in[] = {1, 2, 3, 250, 1, 2, 3};
+    static const char in[] = {1, 2, 3, 120, 1, 2, 3};
     putBuff(buffer, in, sizeof(in));
 
     CircularBuffer_print(buffer);
