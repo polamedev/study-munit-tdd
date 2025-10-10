@@ -32,12 +32,27 @@ ioData IO_Read(ioAddress addr)
 }
 }
 
-void MockIO_setName(const SimpleString &mockName)
+void MockIO_setMockName(const SimpleString &mockName)
 {
     ::mockName = mockName;
 }
 
-void MockIO_resetName()
+void MockIO_resetMockName()
 {
     mockName = "";
+}
+
+void MockIO_expectRead(ioAddress add, ioData retData, unsigned int amount)
+{
+    mock(mockName).expectNCalls(amount, "IO_Read").withParameter("addr", add).andReturnValue((int)retData);
+}
+
+void MockIO_expectWrite(ioAddress add, ioData writeData, unsigned int amount)
+{
+    mock(mockName).expectNCalls(amount, "IO_Write").withParameter("addr", (int)add).withParameter("data", writeData);
+}
+
+void MockIO_checkExpectations()
+{
+    mock(mockName).checkExpectations();
 }

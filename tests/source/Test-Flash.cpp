@@ -36,7 +36,7 @@ const SimpleString ioMockName = "ioMock";
 
 void setup()
 {
-    MockIO_setName(ioMockName);
+    MockIO_setMockName(ioMockName);
 
     address = 0xfeed;
     data    = 0x1dea;
@@ -46,36 +46,36 @@ void setup()
 void teardown()
 {
 
-    mock(ioMockName).checkExpectations();
+    MockIO_checkExpectations();
     mock().clear();
 
-    MockIO_resetName();
+    MockIO_resetMockName();
 }
 
 // START: helpers
 void expectCommand(ioData command)
 {
-    mock(ioMockName).expectOneCall("IO_Write").withParameter("addr", CommandRegister).withParameter("data", command);
+    MockIO_expectWrite(CommandRegister, command);
 }
 
 void expectWriteData()
 {
-    mock(ioMockName).expectOneCall("IO_Write").withParameter("addr", (int)address).withParameter("data", data);
+    MockIO_expectWrite(address, data);
 }
 
 void simulateDeviceStatus(ioData status)
 {
-    mock(ioMockName).expectOneCall("IO_Read").withParameter("addr", StatusRegister).andReturnValue((int)status);
+    MockIO_expectRead(StatusRegister, status);
 }
 
 void simulateDeviceStatusWithRepeat(ioData status, int repeatCount)
 {
-    mock(ioMockName).expectNCalls(repeatCount, "IO_Read").withParameter("addr", StatusRegister).andReturnValue((int)status);
+    MockIO_expectRead(StatusRegister, status, repeatCount);
 }
 
 void simulateReadback(ioData data)
 {
-    mock(ioMockName).expectOneCall("IO_Read").withParameter("addr", (int)address).andReturnValue((int)data);
+    MockIO_expectRead(address, data);
 }
 // END: helpers
 
@@ -226,50 +226,6 @@ TEST(Flash, WriteFails_TimeoutAtEndOfTime)
     LONGS_EQUAL(FLASH_TIMEOUT_ERROR, result);
 }
 // END: WriteFails_TimeoutAtEndOfTime
-
-#if 0  // START: TEST_GROUP1
-TEST_GROUP(Flash)
-{
-    ioAddress address;
-    ioData data;
-    int result;
-
-    void setup()
-    {
-        address = 0xfeed;
-        data = 0x1dea;
-    }
-
-    void teardown()
-    {
-        mock(ioMock).checkExpectations();
-        mock(ioMock).clear();
-    }
-};
-#endif // END: TEST_GROUP1
-
-#if 0  // START: WriteSucceedsReadyImmediately1
-TEST(Flash, WriteSucceeds_Immediately)
-{
-    mock(ioMock).expectOneCall("IO_Write")
-            .withParameter("addr", CommandRegister)
-            .withParameter("value", ProgramCommand);
-    mock(ioMock).expectOneCall("IO_Write")
-            .withParameter("addr", (int) address)
-            .withParameter("value", data);
-			
-    mock(ioMock).expectOneCall("IO_Read")
-            .withParameter("addr", StatusRegister)
-            .andReturnValue((int) ReadyBit);
-    mock(ioMock).expectOneCall("IO_Read")
-            .withParameter("addr", (int) address)
-            .andReturnValue((int) data);
-
-    int result = Flash_Write(address, data);
-
-    LONGS_EQUAL(FLASH_SUCCESS, result);
-}
-#endif // END: WriteSucceedsReadyImmediately1
 
 int main(int argc, char **argv)
 {
