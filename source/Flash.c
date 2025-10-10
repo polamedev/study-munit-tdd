@@ -91,9 +91,9 @@ int Flash_Write(ioAddress offset, ioData data)
 
 FlashStatus Flash_ReadCfi(ioAddress offset, ioData *cfi)
 {
-    IO_Write(offset, ReadCfiQuery);
+    IO_Write(CommandRegister, ReadCfiQuery);
 
-    *cfi = IO_Read(StatusRegister);
+    *cfi = IO_Read(offset);
 
     resetFlash();
     return FLASH_SUCCESS;

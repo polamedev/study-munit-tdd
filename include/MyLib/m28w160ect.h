@@ -51,5 +51,9 @@ typedef enum {
 typedef enum {
     Flash_Cfi_ManufacturerCode_Address = 0x00,
     Flash_Cfi_ManufacturerCode_Data    = 0x0020,
+
+    Flash_Cfi_Qry1_Add  = 0x10,
+    Flash_Cfi_Qry1_Data = 0x51,
+
 } Flash_Cfi;
 

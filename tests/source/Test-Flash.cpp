@@ -214,14 +214,14 @@ TEST(Flash, WriteFails_TimeoutAtEndOfTime)
 TEST(Flash, ReadCfi)
 {
     expectCommand(ReadCfiQuery);
-    MockIO_expectRead(Flash_Cfi_ManufacturerCode_Address, Flash_Cfi_ManufacturerCode_Data);
+    MockIO_expectRead(Flash_Cfi_Qry1_Add, Flash_Cfi_Qry1_Data);
     expectCommand(Reset);
 
     ioData      data   = 0;
-    FlashStatus result = Flash_ReadCfi(Flash_Cfi_ManufacturerCode_Address, &data);
+    FlashStatus result = Flash_ReadCfi(Flash_Cfi_Qry1_Add, &data);
 
     LONGS_EQUAL(result, FLASH_SUCCESS);
-    LONGS_EQUAL(data, 0x0020);
+    LONGS_EQUAL(data, Flash_Cfi_Qry1_Data);
 }
 
 int main(int argc, char **argv)
