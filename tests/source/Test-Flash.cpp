@@ -85,6 +85,7 @@ TEST(Flash, WriteSucceeds_ReadyImmediately)
     expectWriteData();
     simulateDeviceStatus(ReadyBit);
     simulateReadback(data);
+    expectCommand(Reset);
 
     int result = Flash_Write(address, data);
 
@@ -98,6 +99,7 @@ TEST(Flash, WriteSucceeds_NotReadyImmediately)
     simulateDeviceStatusWithRepeat(0, 3);
     simulateDeviceStatus(ReadyBit);
     simulateReadback(data);
+    expectCommand(Reset);
 
     int result = Flash_Write(address, data);
 
@@ -158,6 +160,7 @@ TEST(Flash, WriteFails_FlashReadBackError)
     expectWriteData();
     simulateDeviceStatus(ReadyBit);
     simulateReadback(data - 1);
+    expectCommand(Reset);
 
     int result = Flash_Write(address, data);
 
@@ -171,6 +174,7 @@ TEST(Flash, WriteSucceeds_IgnoresOtherBitsUntilReady)
     simulateDeviceStatus(~ReadyBit);
     simulateDeviceStatus(ReadyBit);
     simulateReadback(data);
+    expectCommand(Reset);
 
     int result = Flash_Write(address, data);
 
@@ -184,6 +188,7 @@ TEST(Flash, WriteFails_Timeout)
     expectCommand(ProgramCommand);
     expectWriteData();
     simulateDeviceStatusWithRepeat(~ReadyBit, 10);
+    expectCommand(Reset);
 
     int result = Flash_Write(address, data);
 
@@ -196,8 +201,10 @@ TEST(Flash, WriteFails_TimeoutAtEndOfTime)
     Flash_Create();
     expectCommand(ProgramCommand);
     expectWriteData();
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 10; i++) {
         simulateDeviceStatus(~ReadyBit);
+    }
+    expectCommand(Reset);
 
     int result = Flash_Write(address, data);
 
