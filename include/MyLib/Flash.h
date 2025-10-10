@@ -32,10 +32,6 @@
 extern "C" {
 #endif
 
-void Flash_Create(void);
-void Flash_Destroy(void);
-int  Flash_Write(ioAddress offset, ioData data);
-
 typedef enum {
     FLASH_SUCCESS = 0,
     FLASH_VPP_ERROR,
@@ -45,6 +41,12 @@ typedef enum {
     FLASH_READ_BACK_ERROR,
     FLASH_TIMEOUT_ERROR
 } FlashStatus;
+
+void Flash_Create(void);
+void Flash_Destroy(void);
+int  Flash_Write(ioAddress offset, ioData data);
+
+FlashStatus Flash_ReadCfi(ioAddress offset, ioData *cfi);
 
 #ifdef __cplusplus
 }

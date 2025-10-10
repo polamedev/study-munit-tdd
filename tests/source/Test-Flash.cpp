@@ -211,6 +211,19 @@ TEST(Flash, WriteFails_TimeoutAtEndOfTime)
     LONGS_EQUAL(FLASH_TIMEOUT_ERROR, result);
 }
 
+TEST(Flash, ReadCfi)
+{
+    expectCommand(ReadCfiQuery);
+    MockIO_expectRead(Flash_Cfi_ManufacturerCode_Address, Flash_Cfi_ManufacturerCode_Data);
+    expectCommand(Reset);
+
+    ioData      data   = 0;
+    FlashStatus result = Flash_ReadCfi(Flash_Cfi_ManufacturerCode_Address, &data);
+
+    LONGS_EQUAL(result, FLASH_SUCCESS);
+    LONGS_EQUAL(data, 0x0020);
+}
+
 int main(int argc, char **argv)
 {
     MockSupportPlugin mockPlugin;
