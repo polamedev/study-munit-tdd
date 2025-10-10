@@ -77,17 +77,14 @@ int Flash_Write(ioAddress offset, ioData data)
         status = IO_Read(StatusRegister);
     }
 
-    if (status != ReadyBit) {
-        resetFlash();
+    resetFlash();
 
+    if (status != ReadyBit) {
         return returnError(status);
     }
     if (data != IO_Read(offset)) {
-        resetFlash();
         return FLASH_READ_BACK_ERROR;
     }
-
-    resetFlash();
 
     return FLASH_SUCCESS;
 }
