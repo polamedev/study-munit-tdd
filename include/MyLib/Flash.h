@@ -46,6 +46,7 @@ typedef enum {
 void Flash_Create(void);
 void Flash_Destroy(void);
 int  Flash_Write(ioAddress offset, ioData data);
+int  Flash_Erase(ioAddress blockAddress);
 
 FlashStatus Flash_ReadCfi(ioAddress offset, ioData *cfi);
 

@@ -32,9 +32,11 @@ typedef enum {
 } Flash_Registers;
 
 typedef enum {
-    ProgramCommand = 0x40,
-    ReadCfiQuery   = 0x98, // Запрос на чтение cfi
-    Reset          = 0xff
+    EraseCommand        = 0x20,
+    EraseAddressConfirm = 0xD0,
+    ProgramCommand      = 0x40,
+    ReadCfiQuery        = 0x98, // Запрос на чтение cfi
+    Reset               = 0xff
 } Flash_Command;
 
 typedef enum {

@@ -247,6 +247,19 @@ TEST(Flash, ErrorCfi)
     LONGS_EQUAL(result, FLASH_ERROR);
 }
 
+TEST(Flash, EraseSucceeds_ReadyImmediately)
+{
+
+    ioAddress eraseBlock = 0x30;
+    expectCommand(EraseCommand);
+    MockIO_expectWrite(eraseBlock, EraseAddressConfirm);
+    simulateDeviceStatus(ReadyBit);
+
+    int result = Flash_Erase(eraseBlock);
+
+    LONGS_EQUAL(FLASH_SUCCESS, result);
+}
+
 int main(int argc, char **argv)
 {
     MockSupportPlugin mockPlugin;

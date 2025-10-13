@@ -89,6 +89,24 @@ int Flash_Write(ioAddress offset, ioData data)
     return FLASH_SUCCESS;
 }
 
+int Flash_Erase(ioAddress blockAddress)
+{
+    IO_Write(CommandRegister, EraseCommand);
+    IO_Write(blockAddress, EraseAddressConfirm);
+
+    uint32_t startTime = MicroTime_Get();
+    ioData   status    = IO_Read(StatusRegister);
+    while ((status & ReadyBit) == 0) {
+        if (MicroTime_Get() - startTime >= FLASH_WRITE_TIMEOUT_IN_MICROSECONDS) {
+            resetFlash();
+            return FLASH_TIMEOUT_ERROR;
+        }
+        status = IO_Read(StatusRegister);
+    }
+
+    return FLASH_SUCCESS;
+}
+
 FlashStatus Flash_ReadCfi(ioAddress offset, ioData *cfi)
 {
     IO_Write(CommandRegister, ReadCfiQuery);
