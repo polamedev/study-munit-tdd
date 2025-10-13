@@ -104,6 +104,21 @@ int Flash_Erase(ioAddress blockAddress)
         status = IO_Read(StatusRegister);
     }
 
+    resetFlash();
+
+    if (status & VppErrorBit) {
+        return FLASH_VPP_ERROR;
+    }
+    else if ((status & (ProgramErrorBit | EraseErrorBit)) == (ProgramErrorBit | EraseErrorBit)) {
+        return FLASH_SEQUENCE_ERROR;
+    }
+    else if (status & EraseErrorBit) {
+        return FLASH_ERROR;
+    }
+    else if (status & BlockProtectionErrorBit) {
+        return FLASH_PROTECTED_BLOCK_ERROR;
+    }
+
     return FLASH_SUCCESS;
 }
 

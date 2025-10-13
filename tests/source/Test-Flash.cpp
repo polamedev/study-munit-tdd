@@ -249,15 +249,102 @@ TEST(Flash, ErrorCfi)
 
 TEST(Flash, EraseSucceeds_ReadyImmediately)
 {
-
     ioAddress eraseBlock = 0x30;
     expectCommand(EraseCommand);
     MockIO_expectWrite(eraseBlock, EraseAddressConfirm);
     simulateDeviceStatus(ReadyBit);
+    expectCommand(Reset);
 
     int result = Flash_Erase(eraseBlock);
 
     LONGS_EQUAL(FLASH_SUCCESS, result);
+}
+
+TEST(Flash, EraseSucceeds_NotReadyImmediately)
+{
+    ioAddress eraseBlock = 0x30;
+    expectCommand(EraseCommand);
+    MockIO_expectWrite(eraseBlock, EraseAddressConfirm);
+    simulateDeviceStatusWithRepeat(~ReadyBit, 3);
+    simulateDeviceStatus(ReadyBit);
+    expectCommand(Reset);
+
+    int result = Flash_Erase(eraseBlock);
+
+    LONGS_EQUAL(FLASH_SUCCESS, result);
+}
+
+TEST(Flash, EraseSucceeds_VppError)
+{
+    ioAddress eraseBlock = 0x30;
+    expectCommand(EraseCommand);
+    MockIO_expectWrite(eraseBlock, EraseAddressConfirm);
+    simulateDeviceStatusWithRepeat(~ReadyBit, 3);
+    simulateDeviceStatus(ReadyBit | VppErrorBit);
+    expectCommand(Reset);
+
+    int result = Flash_Erase(eraseBlock);
+
+    LONGS_EQUAL(FLASH_VPP_ERROR, result);
+}
+
+TEST(Flash, EraseSucceeds_CommandSequenceError)
+{
+    ioAddress eraseBlock = 0x30;
+    expectCommand(EraseCommand);
+    MockIO_expectWrite(eraseBlock, EraseAddressConfirm);
+    simulateDeviceStatus(ReadyBit | ProgramErrorBit | EraseErrorBit);
+    expectCommand(Reset);
+
+    int result = Flash_Erase(eraseBlock);
+
+    LONGS_EQUAL(FLASH_SEQUENCE_ERROR, result);
+}
+
+TEST(Flash, EraseSucceeds_EraseError)
+{
+    ioAddress eraseBlock = 0x30;
+    expectCommand(EraseCommand);
+    MockIO_expectWrite(eraseBlock, EraseAddressConfirm);
+    simulateDeviceStatus(ReadyBit | EraseErrorBit);
+    expectCommand(Reset);
+
+    int result = Flash_Erase(eraseBlock);
+
+    LONGS_EQUAL(FLASH_ERROR, result);
+}
+
+TEST(Flash, EraseSucceeds_ProtectedBlockError)
+{
+    ioAddress eraseBlock = 0x30;
+    expectCommand(EraseCommand);
+    MockIO_expectWrite(eraseBlock, EraseAddressConfirm);
+    simulateDeviceStatus(ReadyBit | BlockProtectionErrorBit);
+    expectCommand(Reset);
+
+    int result = Flash_Erase(eraseBlock);
+
+    LONGS_EQUAL(FLASH_PROTECTED_BLOCK_ERROR, result);
+}
+
+TEST(Flash, EraseSucceeds_TimeoutError)
+{
+    ioAddress eraseBlock = 0x30;
+    expectCommand(EraseCommand);
+    MockIO_expectWrite(eraseBlock, EraseAddressConfirm);
+
+    /**
+     * Будет 11 вызовов MicroTime_Get. 1 - для инициализации времени старта, 2 - 11 для получения текущего времени
+     * на 11 вызов будет время 5000 мкс
+     */
+    simulateDeviceStatusWithRepeat(~ReadyBit, 10);
+    FakeMicroTime_Init(0, 500);
+
+    expectCommand(Reset);
+
+    int result = Flash_Erase(eraseBlock);
+
+    LONGS_EQUAL(FLASH_TIMEOUT_ERROR, result);
 }
 
 int main(int argc, char **argv)
