@@ -30,8 +30,8 @@
 extern "C" {
 #endif
 
-#include "MyLib/common.h"
-#include "MyLib/devices/LightDriver.h"
+#include <MyLib/common.h>
+#include <MyLib/devices/LightDriver.h>
 
 enum {
     MAX_LIGHTS = 32

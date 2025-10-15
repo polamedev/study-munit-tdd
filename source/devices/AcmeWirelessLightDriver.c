@@ -1,11 +1,11 @@
 /***
  * Excerpted from "Test-Driven Development for Embedded C",
  * published by The Pragmatic Bookshelf.
- * Copyrights apply to this code. It may not be used to create training material, 
+ * Copyrights apply to this code. It may not be used to create training material,
  * courses, books, articles, and the like. Contact us if you are in doubt.
- * We make no guarantees that this code is fit for any purpose. 
+ * We make no guarantees that this code is fit for any purpose.
  * Visit http://www.pragmaticprogrammer.com/titles/jgade for more book information.
-***/
+ ***/
 /*- ------------------------------------------------------------------ -*/
 /*-    Copyright (c) James W. Grenning -- All Rights Reserved          -*/
 /*-    For use by owners of Test-Driven Development for Embedded C,    -*/
@@ -24,19 +24,19 @@
 /*-    www.renaissancesoftware.net james@renaissancesoftware.net       -*/
 /*- ------------------------------------------------------------------ -*/
 
-#include "MyLib/devices/AcmeWirelessLightDriver.h"
-#include "MyLib/devices/LightDriverPrivate.h"
+#include "devices/AcmeWirelessLightDriver.h"
 
-#include <stdlib.h>
-#include <memory.h>
 #include "common.h"
+#include "devices/LightDriverPrivate.h"
 
-typedef struct AcmeWirelessLightDriverStruct
-{
+#include <memory.h>
+#include <stdlib.h>
+
+typedef struct AcmeWirelessLightDriverStruct {
     LightDriverStruct base;
-    const char * ssid;
-    const char * key;
-    int channel;
+    const char       *ssid;
+    const char       *key;
+    int               channel;
 } AcmeWirelessLightDriverStruct;
 
 static void destroy(LightDriver super)
@@ -58,22 +58,20 @@ static void turnOff(LightDriver super)
 }
 
 static LightDriverInterfaceStruct interface =
-{
-    turnOn,
-    turnOff,
-    destroy
-};
+    {
+        turnOn,
+        turnOff,
+        destroy};
 
-LightDriver AcmeWirelessLightDriver_Create(int id, const char * ssid, const char * key, int channel)
+LightDriver AcmeWirelessLightDriver_Create(int id, const char *ssid, const char *key, int channel)
 {
-     AcmeWirelessLightDriver self = calloc(1, sizeof(AcmeWirelessLightDriverStruct));
-     self->base.vtable = &interface;
-     self->base.type = "Acme wireless";
-     self->base.id = id;
-     self->ssid = ssid;
-     self->key = key;
-     self->channel = channel;
-     return (LightDriver)self;
+    AcmeWirelessLightDriver self = calloc(1, sizeof(AcmeWirelessLightDriverStruct));
+    self->base.vtable            = &interface;
+    self->base.type              = "Acme wireless";
+    self->base.id                = id;
+    self->ssid                   = ssid;
+    self->key                    = key;
+    self->channel                = channel;
+    return (LightDriver)self;
 }
-
 

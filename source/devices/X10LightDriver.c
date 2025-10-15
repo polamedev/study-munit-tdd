@@ -1,11 +1,11 @@
 /***
  * Excerpted from "Test-Driven Development for Embedded C",
  * published by The Pragmatic Bookshelf.
- * Copyrights apply to this code. It may not be used to create training material, 
+ * Copyrights apply to this code. It may not be used to create training material,
  * courses, books, articles, and the like. Contact us if you are in doubt.
- * We make no guarantees that this code is fit for any purpose. 
+ * We make no guarantees that this code is fit for any purpose.
  * Visit http://www.pragmaticprogrammer.com/titles/jgade for more book information.
-***/
+ ***/
 /*- ------------------------------------------------------------------ -*/
 /*-    Copyright (c) James W. Grenning -- All Rights Reserved          -*/
 /*-    For use by owners of Test-Driven Development for Embedded C,    -*/
@@ -24,16 +24,18 @@
 /*-    www.renaissancesoftware.net james@renaissancesoftware.net       -*/
 /*- ------------------------------------------------------------------ -*/
 
-#include "MyLib/devices/X10LightDriver.h"
-#include "MyLib/devices/LightDriverPrivate.h"
-#include <stdlib.h>
-#include <memory.h>
+#include "devices/X10LightDriver.h"
 
-typedef struct X10LightDriverStruct
-{
+#include "common.h"
+#include "devices/LightDriverPrivate.h"
+
+#include <memory.h>
+#include <stdlib.h>
+
+typedef struct X10LightDriverStruct {
     LightDriverStruct base;
-    X10_HouseCode house;
-    int unit;
+    X10_HouseCode     house;
+    int               unit;
 } X10LightDriverStruct;
 
 static void formatTurnOnMessage(X10LightDriver self)
@@ -73,20 +75,19 @@ static void turnOff(LightDriver super)
 }
 
 static LightDriverInterfaceStruct interface =
-{
-    turnOn,
-    turnOff,
-    destroy
-};
+    {
+        turnOn,
+        turnOff,
+        destroy};
 
 LightDriver X10LightDriver_Create(int id, X10_HouseCode house, int unit)
 {
-     X10LightDriver self = calloc(1, sizeof(X10LightDriverStruct));
-     self->base.vtable = &interface;
-     self->base.type = "X10";
-     self->base.id = id;
-     self->house = house;
-     self->unit = unit;
-     return (LightDriver)self;
+    X10LightDriver self = calloc(1, sizeof(X10LightDriverStruct));
+    self->base.vtable   = &interface;
+    self->base.type     = "X10";
+    self->base.id       = id;
+    self->house         = house;
+    self->unit          = unit;
+    return (LightDriver)self;
 }
 

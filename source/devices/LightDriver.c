@@ -1,11 +1,11 @@
 /***
  * Excerpted from "Test-Driven Development for Embedded C",
  * published by The Pragmatic Bookshelf.
- * Copyrights apply to this code. It may not be used to create training material, 
+ * Copyrights apply to this code. It may not be used to create training material,
  * courses, books, articles, and the like. Contact us if you are in doubt.
- * We make no guarantees that this code is fit for any purpose. 
+ * We make no guarantees that this code is fit for any purpose.
  * Visit http://www.pragmaticprogrammer.com/titles/jgade for more book information.
-***/
+ ***/
 /*- ------------------------------------------------------------------ -*/
 /*-    Copyright (c) James W. Grenning -- All Rights Reserved          -*/
 /*-    For use by owners of Test-Driven Development for Embedded C,    -*/
@@ -24,8 +24,9 @@
 /*-    www.renaissancesoftware.net james@renaissancesoftware.net       -*/
 /*- ------------------------------------------------------------------ -*/
 
-#include "MyLib/devices/LightDriver.h"
-#include "MyLib/common.h"
+#include "devices/LightDriverPrivate.h"
+
+#include "common.h"
 
 void LightDriver_TurnOn(LightDriver self)
 {
@@ -45,7 +46,7 @@ void LightDriver_Destroy(LightDriver self)
         self->vtable->Destroy(self);
 }
 
-const char * LightDriver_GetType(LightDriver driver)
+const char *LightDriver_GetType(LightDriver driver)
 {
     return driver->type;
 }
@@ -55,14 +56,11 @@ int LightDriver_GetId(LightDriver driver)
     return driver->id;
 }
 
-
 #if 0 
 void LightDriver_TurnOn(LightDriver self)
 {
     if (self && self->vtable && self->vtable->TurnOn)
         self->vtable->TurnOn(self);
 }
-#endif 
-
-
+#endif
 

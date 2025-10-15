@@ -1,11 +1,11 @@
 /***
  * Excerpted from "Test-Driven Development for Embedded C",
  * published by The Pragmatic Bookshelf.
- * Copyrights apply to this code. It may not be used to create training material, 
+ * Copyrights apply to this code. It may not be used to create training material,
  * courses, books, articles, and the like. Contact us if you are in doubt.
- * We make no guarantees that this code is fit for any purpose. 
+ * We make no guarantees that this code is fit for any purpose.
  * Visit http://www.pragmaticprogrammer.com/titles/jgade for more book information.
-***/
+ ***/
 /*- ------------------------------------------------------------------ -*/
 /*-    Copyright (c) James W. Grenning -- All Rights Reserved          -*/
 /*-    For use by owners of Test-Driven Development for Embedded C,    -*/
@@ -26,16 +26,16 @@
 
 #include "CountingLightDriver.h"
 #include <MyLib/common.h>
+#include <MyLib/devices/LightDriverPrivate.h>
 
-#include <stdlib.h>
 #include <memory.h>
+#include <stdlib.h>
 
-typedef struct CountingLightDriverStruct * CountingLightDriver;
+typedef struct CountingLightDriverStruct *CountingLightDriver;
 
-typedef struct CountingLightDriverStruct
-{
+typedef struct CountingLightDriverStruct {
     LightDriverStruct base;
-    int counter;
+    int               counter;
 } CountingLightDriverStruct;
 
 static void count(LightDriver base)
@@ -51,9 +51,8 @@ static void destroy(LightDriver base)
 }
 
 static LightDriverInterfaceStruct interface =
-{
-        count, count, destroy
-};
+    {
+        count, count, destroy};
 
 #if 0 
 LightDriver CountingLightDriver_Create(int id)
@@ -63,14 +62,14 @@ LightDriver CountingLightDriver_Create(int id)
     self->base.id = id;
     return (LightDriver)self;
 }
-#endif 
+#endif
 
 LightDriver CountingLightDriver_Create(int id)
 {
     CountingLightDriver self = calloc(1, sizeof(CountingLightDriverStruct));
-    self->base.vtable = &interface;
-    self->base.type = "CountingLightDriver";
-    self->base.id = id;
+    self->base.vtable        = &interface;
+    self->base.type          = "CountingLightDriver";
+    self->base.id            = id;
     return (LightDriver)self;
 }
 

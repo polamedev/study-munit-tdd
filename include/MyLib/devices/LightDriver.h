@@ -1,11 +1,11 @@
 /***
  * Excerpted from "Test-Driven Development for Embedded C",
  * published by The Pragmatic Bookshelf.
- * Copyrights apply to this code. It may not be used to create training material, 
+ * Copyrights apply to this code. It may not be used to create training material,
  * courses, books, articles, and the like. Contact us if you are in doubt.
- * We make no guarantees that this code is fit for any purpose. 
+ * We make no guarantees that this code is fit for any purpose.
  * Visit http://www.pragmaticprogrammer.com/titles/jgade for more book information.
-***/
+ ***/
 /*- ------------------------------------------------------------------ -*/
 /*-    Copyright (c) James W. Grenning -- All Rights Reserved          -*/
 /*-    For use by owners of Test-Driven Development for Embedded C,    -*/
@@ -24,18 +24,20 @@
 /*-    www.renaissancesoftware.net james@renaissancesoftware.net       -*/
 /*- ------------------------------------------------------------------ -*/
 
-#ifndef D_LightDriver_H
-#define D_LightDriver_H
+#pragma once
 
-typedef struct LightDriverStruct  * LightDriver;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-void LightDriver_Destroy(LightDriver);
-void LightDriver_TurnOn(LightDriver);
-void LightDriver_TurnOff(LightDriver);
-const char * LightDriver_GetType(LightDriver driver);
-int LightDriver_GetId(LightDriver driver);
+typedef struct LightDriverStruct *LightDriver;
 
+void        LightDriver_Destroy(LightDriver);
+void        LightDriver_TurnOn(LightDriver);
+void        LightDriver_TurnOff(LightDriver);
+const char *LightDriver_GetType(LightDriver driver);
+int         LightDriver_GetId(LightDriver driver);
 
-#include "LightDriverPrivate.h"
-
-#endif  /* D_LightDriver_H */
+#ifdef __cplusplus
+}
+#endif

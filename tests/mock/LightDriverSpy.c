@@ -28,6 +28,7 @@
 
 #include <MyLib/HomeAutomation/LightController.h>
 #include <MyLib/common.h>
+#include <MyLib/devices/LightDriverPrivate.h>
 
 #include <memory.h>
 #include <stdlib.h>

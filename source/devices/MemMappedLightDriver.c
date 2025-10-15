@@ -1,11 +1,11 @@
 /***
  * Excerpted from "Test-Driven Development for Embedded C",
  * published by The Pragmatic Bookshelf.
- * Copyrights apply to this code. It may not be used to create training material, 
+ * Copyrights apply to this code. It may not be used to create training material,
  * courses, books, articles, and the like. Contact us if you are in doubt.
- * We make no guarantees that this code is fit for any purpose. 
+ * We make no guarantees that this code is fit for any purpose.
  * Visit http://www.pragmaticprogrammer.com/titles/jgade for more book information.
-***/
+ ***/
 /*- ------------------------------------------------------------------ -*/
 /*-    Copyright (c) James W. Grenning -- All Rights Reserved          -*/
 /*-    For use by owners of Test-Driven Development for Embedded C,    -*/
@@ -24,51 +24,50 @@
 /*-    www.renaissancesoftware.net james@renaissancesoftware.net       -*/
 /*- ------------------------------------------------------------------ -*/
 
+#include "devices/MemMappedLightDriver.h"
 
-#include "MyLib/devices/MemMappedLightDriver.h"
-#include "MyLib/devices/LightDriverPrivate.h"
-#include <stdlib.h>
-#include <memory.h>
 #include "common.h"
+#include "devices/LightDriverPrivate.h"
 
-typedef struct MemMappedLightDriverStruct
-{
+#include <memory.h>
+#include <stdlib.h>
+
+typedef struct MemMappedLightDriverStruct {
     LightDriverStruct base;
-    uint32_t * address;
+    uint32_t         *address;
 } MemMappedLightDriverStruct;
 
 static void destroy(LightDriver super)
 {
-    MemMappedLightDriver self = (MemMappedLightDriver) super;
+    MemMappedLightDriver self = (MemMappedLightDriver)super;
     free(self);
 }
 
 static void turnOn(LightDriver super)
 {
-    MemMappedLightDriver self = (MemMappedLightDriver) super;
+    MemMappedLightDriver self = (MemMappedLightDriver)super;
     explodesInTestEnvironment(self);
 }
 
 static void turnOff(LightDriver super)
 {
-    MemMappedLightDriver self = (MemMappedLightDriver) super;
+    MemMappedLightDriver self = (MemMappedLightDriver)super;
     explodesInTestEnvironment(self);
 }
 
 static LightDriverInterfaceStruct interface =
-{
-    turnOn,
-    turnOff,
-    destroy
-};
+    {
+        turnOn,
+        turnOff,
+        destroy};
 
-LightDriver MemMappedLightDriver_Create(int id, uint32_t * address)
+LightDriver MemMappedLightDriver_Create(int id, uint32_t *address)
 {
     MemMappedLightDriver self = calloc(1, sizeof(MemMappedLightDriverStruct));
-    self->base.vtable = &interface;
-    self->base.type = "Memory mapped";
-    self->base.id = id;
-    self->address = address;
+    self->base.vtable         = &interface;
+    self->base.type           = "Memory mapped";
+    self->base.id             = id;
+    self->address             = address;
     return (LightDriver)self;
 }
 
