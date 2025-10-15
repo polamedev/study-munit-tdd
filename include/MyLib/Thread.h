@@ -1,11 +1,11 @@
 /***
  * Excerpted from "Test-Driven Development for Embedded C",
  * published by The Pragmatic Bookshelf.
- * Copyrights apply to this code. It may not be used to create training material, 
+ * Copyrights apply to this code. It may not be used to create training material,
  * courses, books, articles, and the like. Contact us if you are in doubt.
- * We make no guarantees that this code is fit for any purpose. 
+ * We make no guarantees that this code is fit for any purpose.
  * Visit http://www.pragmaticprogrammer.com/titles/jgade for more book information.
-***/
+ ***/
 /*- ------------------------------------------------------------------ -*/
 /*-    Copyright (c) James W. Grenning -- All Rights Reserved          -*/
 /*-    For use by owners of Test-Driven Development for Embedded C,    -*/
@@ -24,20 +24,24 @@
 /*-    www.renaissancesoftware.net james@renaissancesoftware.net       -*/
 /*- ------------------------------------------------------------------ -*/
 
-#ifndef D_Thread_H
-#define D_Thread_H
+#pragma once
 
-typedef struct ThreadStruct * Thread;
-typedef void * (*ThreadEntryFunction)(void *);
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+typedef struct ThreadStruct *Thread;
+typedef void *(*ThreadEntryFunction)(void *);
 
-Thread Thread_Create(ThreadEntryFunction f, void * parameter);
-void Thread_Start(Thread);
-void Thread_Destroy(Thread);
+Thread Thread_Create(ThreadEntryFunction f, void *parameter);
+void   Thread_Start(Thread);
+void   Thread_Destroy(Thread);
 
-void Thread_Join(Thread, void **result);
-void * Thread_Result(Thread);
-void MyOs_Init(int maxThreads);
-void MyOs_ShutDown(void);
+void  Thread_Join(Thread, void **result);
+void *Thread_Result(Thread);
+void  MyOs_Init(int maxThreads);
+void  MyOs_ShutDown(void);
 
-#endif  /* D_Thread_H */
+#ifdef __cplusplus
+}
+#endif

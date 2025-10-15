@@ -1,11 +1,11 @@
 /***
  * Excerpted from "Test-Driven Development for Embedded C",
  * published by The Pragmatic Bookshelf.
- * Copyrights apply to this code. It may not be used to create training material, 
+ * Copyrights apply to this code. It may not be used to create training material,
  * courses, books, articles, and the like. Contact us if you are in doubt.
- * We make no guarantees that this code is fit for any purpose. 
+ * We make no guarantees that this code is fit for any purpose.
  * Visit http://www.pragmaticprogrammer.com/titles/jgade for more book information.
-***/
+ ***/
 /*- ------------------------------------------------------------------ -*/
 /*-    Copyright (c) James W. Grenning -- All Rights Reserved          -*/
 /*-    For use by owners of Test-Driven Development for Embedded C,    -*/
@@ -26,31 +26,31 @@
 
 #include "Thread.h"
 #include "common.h"
-#include <stdlib.h>
 #include <memory.h>
 #include <pthread.h>
+#include <stdlib.h>
 
 /*
  * Book readers... I discovered that a started flag is needed on
  * some pthread systems.  This is not discussed in the book
  */
 
-typedef struct ThreadStruct
-{
+typedef struct ThreadStruct {
     ThreadEntryFunction entry;
-    void * parameter;
-    pthread_t pthread;
-    BOOL started;
+    void               *parameter;
+    pthread_t           pthread;
+    BOOL                started;
 
 } ThreadStruct;
 
-Thread Thread_Create(ThreadEntryFunction f, void * parameter)
+Thread Thread_Create(ThreadEntryFunction f, void *parameter)
 {
-     Thread self = calloc(1, sizeof(ThreadStruct));
-     self->entry = f;
-     self->parameter = parameter;
-     self->started = FALSE;;
-     return self;
+    Thread self     = calloc(1, sizeof(ThreadStruct));
+    self->entry     = f;
+    self->parameter = parameter;
+    self->started   = FALSE;
+    ;
+    return self;
 }
 
 void Thread_Destroy(Thread self)
@@ -66,7 +66,7 @@ void Thread_Start(Thread self)
     pthread_create(&self->pthread, NULL, self->entry, self->parameter);
 }
 
-void Thread_Join(Thread other, void ** result)
+void Thread_Join(Thread other, void **result)
 {
     if (other->started)
         pthread_join(other->pthread, result);
