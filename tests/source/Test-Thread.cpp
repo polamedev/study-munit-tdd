@@ -17,7 +17,6 @@
 //- ------------------------------------------------------------------
 
 #include <MyLib/Thread.h>
-#include <MyLib/common.h>
 
 #include <CppUTest/CommandLineTestRunner.h>
 #include <CppUTest/TestHarness.h>
@@ -28,31 +27,22 @@ be acquired and released. One thread can wait for a signal from
 another thread.
 */
 
-static volatile int threadRan    = FALSE;
+static volatile bool threadRan    = false;
 static int          threadResult = 42;
 
 static void *threadEntry(void *p)
 {
     (void)p;
-    threadRan = TRUE;
+    threadRan = true;
     return &threadResult;
 }
-
-#if 0  
-static int threadRan = FALSE;
-static void * threadEntry(void * p)
-{
-    threadRan = TRUE;
-    return 0;
-}
-#endif
 
 TEST_GROUP(Thread) {
 Thread thread;
 
 void setup()
 {
-    threadRan = FALSE;
+    threadRan = false;
 }
 
 void teardown()
@@ -64,7 +54,7 @@ TEST(Thread, CreateDoesNotStartThread)
 {
     thread = Thread_Create(threadEntry, 0);
     Thread_Destroy(thread);
-    CHECK(FALSE == threadRan);
+    CHECK_FALSE(threadRan);
 }
 
 TEST(Thread, StartedThreadRunsBeforeItIsDestroyed)
@@ -72,7 +62,7 @@ TEST(Thread, StartedThreadRunsBeforeItIsDestroyed)
     thread = Thread_Create(threadEntry, 0);
     Thread_Start(thread);
     Thread_Destroy(thread);
-    CHECK(TRUE == threadRan);
+    CHECK_TRUE(threadRan);
 }
 
 TEST(Thread, Join)
@@ -93,7 +83,7 @@ static void *mutexThreadEntry(void *p)
     (void)p;
 
     // Выставить глобальную переменную
-    threadRan = TRUE;
+    threadRan = true;
 
     // Ожидать мьютекс
     Thread_Mutex_Lock(mutex);

@@ -25,7 +25,6 @@
 /*- ------------------------------------------------------------------ -*/
 
 #include "Thread.h"
-#include "common.h"
 #include <memory.h>
 #include <pthread.h>
 #include <stdlib.h>
@@ -39,7 +38,7 @@ typedef struct ThreadStruct {
     ThreadEntryFunction entry;
     void               *parameter;
     pthread_t           pthread;
-    BOOL                started;
+    bool                started;
 
 } ThreadStruct;
 
@@ -48,8 +47,7 @@ Thread Thread_Create(ThreadEntryFunction f, void *parameter)
     Thread self     = calloc(1, sizeof(ThreadStruct));
     self->entry     = f;
     self->parameter = parameter;
-    self->started   = FALSE;
-    ;
+    self->started   = false;
     return self;
 }
 
@@ -62,7 +60,7 @@ void Thread_Destroy(Thread self)
 
 void Thread_Start(Thread self)
 {
-    self->started = TRUE;
+    self->started = true;
     pthread_create(&self->pthread, NULL, self->entry, self->parameter);
 }
 
@@ -70,7 +68,7 @@ void Thread_Join(Thread other, void **result)
 {
     if (other->started)
         pthread_join(other->pthread, result);
-    other->started = FALSE;
+    other->started = false;
 }
 
 typedef struct ThreadMutexStruct {
