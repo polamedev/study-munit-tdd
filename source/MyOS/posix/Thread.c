@@ -73,6 +73,35 @@ void Thread_Join(Thread other, void **result)
     other->started = FALSE;
 }
 
+typedef struct ThreadMutexStruct {
+    pthread_mutex_t pthread_mutex;
+} ThreadMutexStruct;
+
+ThreadMutex Thread_Mutex_Create()
+{
+    ThreadMutex self = calloc(1, sizeof(ThreadMutexStruct));
+    pthread_mutex_init(&self->pthread_mutex, NULL);
+    return self;
+}
+
+void Thread_Mutex_Destroy(ThreadMutex self)
+{
+    pthread_mutex_destroy(&self->pthread_mutex);
+    free(self);
+}
+
+bool Thread_Mutex_Lock(ThreadMutex self)
+{
+    pthread_mutex_lock(&self->pthread_mutex);
+    return true;
+}
+
+bool Thread_Mutex_Unlock(ThreadMutex self)
+{
+    pthread_mutex_unlock(&self->pthread_mutex);
+    return true;
+}
+
 #if 0
 typedef struct ThreadStruct
 {

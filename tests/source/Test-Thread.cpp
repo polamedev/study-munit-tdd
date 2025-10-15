@@ -28,8 +28,9 @@ be acquired and released. One thread can wait for a signal from
 another thread.
 */
 
-static int   threadRan    = FALSE;
-static int   threadResult = 42;
+static volatile int threadRan    = FALSE;
+static int          threadResult = 42;
+
 static void *threadEntry(void *p)
 {
     (void)p;
@@ -84,7 +85,54 @@ TEST(Thread, Join)
     LONGS_EQUAL(42, *static_cast<int *>(result));
 }
 
+volatile bool isThreadUnblock;
+ThreadMutex   mutex;
+
+static void *mutexThreadEntry(void *p)
+{
+    (void)p;
+
+    // Выставить глобальную переменную
+    threadRan = TRUE;
+
+    // Ожидать мьютекс
+    Thread_Mutex_Lock(mutex);
+
+    isThreadUnblock = true;
+
+    Thread_Mutex_Unlock(mutex);
+    return NULL;
+}
+
+TEST(Thread, Mutex)
+{
+    isThreadUnblock = false;
+    mutex           = Thread_Mutex_Create();
+    thread          = Thread_Create(mutexThreadEntry, 0);
+
+    // Забрать мьютекс
+    Thread_Mutex_Lock(mutex);
+
+    Thread_Start(thread);
+
+    // Ожидаем пока не запустится поток
+    while (threadRan == false) {
+    }
+    // Проверяем, что поток заблокировался, он не должен был выставить переменную isThreadUnblock
+    CHECK_FALSE(isThreadUnblock);
+    // Отдать мьютекс мьютекс
+    Thread_Mutex_Unlock(mutex);
+
+    Thread_Join(thread, NULL);
+    // Проверяем, что поток после отдачи мьютекса разблокировался
+    CHECK_TRUE(isThreadUnblock);
+
+    Thread_Destroy(thread);
+    Thread_Mutex_Destroy(mutex);
+}
+
 int main(int argc, char **argv)
 {
+    printf("> Test-Thread ");
     return RUN_ALL_TESTS(argc, argv);
 }

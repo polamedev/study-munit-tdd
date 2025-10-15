@@ -30,6 +30,8 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
+
 typedef struct ThreadStruct *Thread;
 typedef void *(*ThreadEntryFunction)(void *);
 
@@ -37,7 +39,15 @@ Thread Thread_Create(ThreadEntryFunction f, void *parameter);
 void   Thread_Start(Thread);
 void   Thread_Destroy(Thread);
 
-void  Thread_Join(Thread, void **result);
+void Thread_Join(Thread, void **result);
+
+typedef struct ThreadMutexStruct *ThreadMutex;
+
+ThreadMutex Thread_Mutex_Create();
+void        Thread_Mutex_Destroy(ThreadMutex);
+bool        Thread_Mutex_Lock(ThreadMutex);
+bool        Thread_Mutex_Unlock(ThreadMutex);
+
 void *Thread_Result(Thread);
 void  MyOs_Init(int maxThreads);
 void  MyOs_ShutDown(void);
