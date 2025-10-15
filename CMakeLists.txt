@@ -52,6 +52,7 @@ target_sources(MyLib
     ${CMAKE_CURRENT_SOURCE_DIR}/source/TaskSchedule.c
     ${CMAKE_CURRENT_SOURCE_DIR}/source/FormatOutput.c
     ${CMAKE_CURRENT_SOURCE_DIR}/source/Flash.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/MyOS/posix/Thread.c
 )
 
 add_executable(TDD-example
