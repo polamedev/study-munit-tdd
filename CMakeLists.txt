@@ -53,6 +53,15 @@ target_sources(MyLib
     ${CMAKE_CURRENT_SOURCE_DIR}/source/FormatOutput.c
     ${CMAKE_CURRENT_SOURCE_DIR}/source/Flash.c
     ${CMAKE_CURRENT_SOURCE_DIR}/source/MyOS/posix/Thread.c
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/devices/AcmeWirelessLightDriver.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/devices/LightDriver.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/devices/MemMappedLightDriver.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/devices/X10LightDriver.c
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/HomeAutomation/LightController.c
+
+
 )
 
 add_executable(TDD-example

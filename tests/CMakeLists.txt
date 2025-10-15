@@ -14,7 +14,15 @@ add_library(Mock-FakeMicroTime OBJECT mock/FakeMicroTime.c)
 target_include_directories(Mock-FakeMicroTime INTERFACE mock)
 target_link_libraries(Mock-FakeMicroTime PUBLIC MyLib)
 
+# Объектная библиотека LightDriverSpy
+add_library(Mock-LightDriverSpy OBJECT mock/LightDriverSpy.c)
+target_include_directories(Mock-LightDriverSpy INTERFACE mock)
+target_link_libraries(Mock-LightDriverSpy PUBLIC MyLib)
 
+# Объектная библиотека CountingLightDriver
+add_library(Mock-CountingLightDriver OBJECT mock/CountingLightDriver.c)
+target_include_directories(Mock-CountingLightDriver INTERFACE mock)
+target_link_libraries(Mock-CountingLightDriver PUBLIC MyLib)
 
 add_library(Mock-SpyFormatOutput OBJECT mock/SpyFormatOutput.c)
 target_include_directories(Mock-SpyFormatOutput INTERFACE mock)
@@ -51,3 +59,12 @@ add_test(Test-Flash Test-Flash)
 add_executable(Test-Thread source/Test-Thread.cpp)
 target_link_libraries(Test-Thread CppUTest::CppUTest CppUTest::CppUTestExt MyLib)
 add_test(Test-Thread Test-Thread)
+
+# Тест для шпиона LightDriverSpyTest
+add_executable(Test-LightDriverSpyTest mock/LightDriverSpyTest.cpp)
+target_link_libraries(Test-LightDriverSpyTest CppUTest::CppUTest CppUTest::CppUTestExt Mock-LightDriverSpy)
+add_test(Test-LightDriverSpyTest Test-LightDriverSpyTest)
+
+add_executable(Test-LightController source/Test-LightController.cpp)
+target_link_libraries(Test-LightController CppUTest::CppUTest CppUTest::CppUTestExt MyLib Mock-LightDriverSpy Mock-CountingLightDriver)
+add_test(Test-LightController Test-LightController)
