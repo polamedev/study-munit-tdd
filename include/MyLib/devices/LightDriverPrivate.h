@@ -44,6 +44,7 @@ typedef struct LightDriverInterfaceStruct {
     void (*TurnOn)(LightDriver);
     void (*TurnOff)(LightDriver);
     void (*Destroy)(LightDriver);
+    void (*setLight)(LightDriver, int light);
 } LightDriverInterfaceStruct;
 
 #ifdef __cplusplus

@@ -23,7 +23,8 @@
 #include <CppUTest/CommandLineTestRunner.h>
 #include <CppUTest/TestHarness.h>
 
-static int callCount = 0;
+static int callCount   = 0;
+static int globalLight = 0;
 
 static void incrementCall(LightDriver self)
 {
@@ -31,7 +32,13 @@ static void incrementCall(LightDriver self)
     callCount++;
 }
 
-LightDriverInterfaceStruct incrementCalls = {incrementCall, incrementCall, incrementCall};
+static void setLight(LightDriver self, int light)
+{
+    (void)self;
+    globalLight = light;
+}
+
+LightDriverInterfaceStruct incrementCalls = {incrementCall, incrementCall, incrementCall, setLight};
 
 LightDriverStruct testDriver = {
     &incrementCalls,
@@ -46,7 +53,8 @@ void setup()
 
 void teardown()
 {
-    callCount = 0;
+    callCount   = 0;
+    globalLight = 0;
 }
 }; // TEST_GROUP(LightDriver)
 
@@ -80,6 +88,12 @@ TEST(LightDriver, DestroyCall)
 {
     LightDriver_Destroy(&testDriver);
     LONGS_EQUAL(callCount, 1);
+}
+
+TEST(LightDriver, SetLightCall)
+{
+    LightDriver_SetLight(&testDriver, 100);
+    LONGS_EQUAL(globalLight, 100);
 }
 
 int main(int argc, char **argv)

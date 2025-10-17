@@ -24,6 +24,7 @@
 /*-    www.renaissancesoftware.net james@renaissancesoftware.net       -*/
 /*- ------------------------------------------------------------------ -*/
 
+#include "LightDriver.h"
 #include "devices/LightDriverPrivate.h"
 
 #include "common.h"
@@ -38,6 +39,12 @@ void LightDriver_TurnOff(LightDriver self)
 {
     if (self)
         self->vtable->TurnOff(self);
+}
+
+void LightDriver_SetLight(LightDriver self, int light)
+{
+     if (self)
+        self->vtable->setLight(self, light);
 }
 
 void LightDriver_Destroy(LightDriver self)

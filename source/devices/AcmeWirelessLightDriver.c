@@ -57,11 +57,12 @@ static void turnOff(LightDriver super)
     explodesInTestEnvironment(self);
 }
 
-static LightDriverInterfaceStruct interface =
-    {
-        turnOn,
-        turnOff,
-        destroy};
+static LightDriverInterfaceStruct interface = {
+    turnOn,
+    turnOff,
+    destroy,
+    NULL,
+};
 
 LightDriver AcmeWirelessLightDriver_Create(int id, const char *ssid, const char *key, int channel)
 {

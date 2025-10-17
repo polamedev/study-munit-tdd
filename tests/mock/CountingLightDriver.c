@@ -50,9 +50,7 @@ static void destroy(LightDriver base)
     free(self);
 }
 
-static LightDriverInterfaceStruct interface =
-    {
-        count, count, destroy};
+static LightDriverInterfaceStruct interface = {count, count, destroy, NULL};
 
 #if 0 
 LightDriver CountingLightDriver_Create(int id)

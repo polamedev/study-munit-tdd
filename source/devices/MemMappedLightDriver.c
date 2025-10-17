@@ -55,11 +55,12 @@ static void turnOff(LightDriver super)
     explodesInTestEnvironment(self);
 }
 
-static LightDriverInterfaceStruct interface =
-    {
-        turnOn,
-        turnOff,
-        destroy};
+static LightDriverInterfaceStruct interface = {
+    turnOn,
+    turnOff,
+    destroy,
+    NULL,
+};
 
 LightDriver MemMappedLightDriver_Create(int id, uint32_t *address)
 {

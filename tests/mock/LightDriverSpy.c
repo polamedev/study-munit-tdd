@@ -44,8 +44,7 @@ static int lastState;
 void LightDriverSpy_Reset(void)
 {
     int i;
-    for (i = 0; i < MAX_LIGHTS; i++)
-    {
+    for (i = 0; i < MAX_LIGHTS; i++) {
         states[i] = LIGHT_STATE_UNKNOWN;
     }
     lastId    = LIGHT_ID_UNKNOWN;
@@ -55,8 +54,7 @@ void LightDriverSpy_Reset(void)
 void LightDriverSpy_AddSpiesToController(void)
 {
     int i;
-    for (i = 0; i < MAX_LIGHTS; i++)
-    {
+    for (i = 0; i < MAX_LIGHTS; i++) {
         LightDriver spy = (LightDriver)LightDriverSpy_Create(i);
         LightController_Add(i, spy);
     }
@@ -87,11 +85,12 @@ static void turnOff(LightDriver base)
     update(self->base.id, LIGHT_OFF);
 }
 
-static LightDriverInterfaceStruct interface =
-    {
-        turnOn,
-        turnOff,
-        destroy};
+static LightDriverInterfaceStruct interface = {
+    turnOn,
+    turnOff,
+    destroy,
+    NULL,
+};
 
 #if 0 
 static LightDriverInterfaceStruct vtable =

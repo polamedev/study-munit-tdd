@@ -40,8 +40,9 @@ add_library(MyLib STATIC)
 
 target_include_directories(MyLib
     PRIVATE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/MyLib>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/MyLib>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/MyLib/devices>
     INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )

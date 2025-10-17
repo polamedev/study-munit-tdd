@@ -74,11 +74,12 @@ static void turnOff(LightDriver super)
     sendMessage(self);
 }
 
-static LightDriverInterfaceStruct interface =
-    {
-        turnOn,
-        turnOff,
-        destroy};
+static LightDriverInterfaceStruct interface = {
+    turnOn,
+    turnOff,
+    destroy,
+    NULL,
+};
 
 LightDriver X10LightDriver_Create(int id, X10_HouseCode house, int unit)
 {
