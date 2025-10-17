@@ -43,7 +43,7 @@ void LightDriver_TurnOff(LightDriver self)
 
 void LightDriver_SetLight(LightDriver self, int light)
 {
-     if (self)
+     if (self && self->vtable->setLight != NULL)
         self->vtable->setLight(self, light);
 }
 

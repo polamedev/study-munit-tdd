@@ -90,6 +90,15 @@ TEST(LightDriver, DestroyCall)
     LONGS_EQUAL(callCount, 1);
 }
 
+TEST(LightDriver, NullSetLightPointDoesNoHarm)
+{
+    testDriver.vtable->setLight = NULL;
+    LightDriver_SetLight(&testDriver, 100);
+    LONGS_EQUAL(globalLight, 0);
+    testDriver.vtable->setLight = setLight;
+
+}
+
 TEST(LightDriver, SetLightCall)
 {
     LightDriver_SetLight(&testDriver, 100);
