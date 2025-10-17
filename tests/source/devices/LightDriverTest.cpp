@@ -23,20 +23,21 @@
 #include <CppUTest/CommandLineTestRunner.h>
 #include <CppUTest/TestHarness.h>
 
-static void null(LightDriver self)
+static int callCount = 0;
+
+static void incrementCall(LightDriver self)
 {
-    self = self;
+    (void)self;
+    callCount++;
 }
 
-LightDriverInterfaceStruct doNothing =
-    {
-        null, null, null};
+LightDriverInterfaceStruct incrementCalls = {incrementCall, incrementCall, incrementCall};
 
-LightDriverStruct testDriver =
-    {
-        &doNothing,
-        "testDriver",
-        13};
+LightDriverStruct testDriver = {
+    &incrementCalls,
+    "testDriver",
+    13,
+};
 
 TEST_GROUP(LightDriver) {
 void setup()
@@ -45,11 +46,13 @@ void setup()
 
 void teardown()
 {
+    callCount = 0;
 }
 }; // TEST_GROUP(LightDriver)
 
 TEST(LightDriver, NullDriverDoesNoHarm)
 {
+    // Вызов пустого драйвера не должен сломаться
     LightDriver_TurnOn(NULL);
     LightDriver_TurnOff(NULL);
     LightDriver_Destroy(NULL);
@@ -59,6 +62,24 @@ TEST(LightDriver, Accessors)
 {
     LONGS_EQUAL(13, LightDriver_GetId(&testDriver));
     STRCMP_EQUAL("testDriver", LightDriver_GetType(&testDriver));
+}
+
+TEST(LightDriver, TurnOnCall)
+{
+    LightDriver_TurnOn(&testDriver);
+    LONGS_EQUAL(callCount, 1);
+}
+
+TEST(LightDriver, TurnOffCall)
+{
+    LightDriver_TurnOff(&testDriver);
+    LONGS_EQUAL(callCount, 1);
+}
+
+TEST(LightDriver, DestroyCall)
+{
+    LightDriver_Destroy(&testDriver);
+    LONGS_EQUAL(callCount, 1);
 }
 
 int main(int argc, char **argv)
