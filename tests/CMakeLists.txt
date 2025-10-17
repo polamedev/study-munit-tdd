@@ -60,6 +60,11 @@ add_executable(Test-Thread source/Test-Thread.cpp)
 target_link_libraries(Test-Thread CppUTest::CppUTest CppUTest::CppUTestExt MyLib)
 add_test(Test-Thread Test-Thread)
 
+# Тест интерфейса LightDriver
+add_executable(Test-LightDriver source/devices/LightDriverTest.cpp)
+target_link_libraries(Test-LightDriver CppUTest::CppUTest CppUTest::CppUTestExt MyLib Mock-LightDriverSpy Mock-CountingLightDriver Mock-LightDriverSpy)
+add_test(Test-LightDriver Test-LightDriver)
+
 # Тест для шпиона LightDriverSpyTest
 add_executable(Test-LightDriverSpyTest mock/LightDriverSpyTest.cpp)
 target_link_libraries(Test-LightDriverSpyTest CppUTest::CppUTest CppUTest::CppUTestExt Mock-LightDriverSpy)

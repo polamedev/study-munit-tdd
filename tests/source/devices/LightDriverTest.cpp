@@ -1,52 +1,52 @@
 //- ------------------------------------------------------------------
-//-    Copyright (c) James W. Grenning -- All Rights Reserved         
-//-    For use by owners of Test-Driven Development for Embedded C,   
-//-    and attendees of Renaissance Software Consulting, Co. training 
-//-    classes.                                                       
-//-                                                                   
-//-    Available at http://pragprog.com/titles/jgade/                 
-//-        ISBN 1-934356-62-X, ISBN13 978-1-934356-62-3               
-//-                                                                   
-//-    Authorized users may use this source code in your own          
-//-    projects, however the source code may not be used to           
-//-    create training material, courses, books, articles, and        
-//-    the like. We make no guarantees that this source code is       
-//-    fit for any purpose.                                           
-//-                                                                   
-//-    www.renaissancesoftware.net james@renaissancesoftware.net      
+//-    Copyright (c) James W. Grenning -- All Rights Reserved
+//-    For use by owners of Test-Driven Development for Embedded C,
+//-    and attendees of Renaissance Software Consulting, Co. training
+//-    classes.
+//-
+//-    Available at http://pragprog.com/titles/jgade/
+//-        ISBN 1-934356-62-X, ISBN13 978-1-934356-62-3
+//-
+//-    Authorized users may use this source code in your own
+//-    projects, however the source code may not be used to
+//-    create training material, courses, books, articles, and
+//-    the like. We make no guarantees that this source code is
+//-    fit for any purpose.
+//-
+//-    www.renaissancesoftware.net james@renaissancesoftware.net
 //- ------------------------------------------------------------------
 
-extern "C"
-{
 #include "LightDriverSpy.h"
+
+#include <MyLib/devices/LightDriverPrivate.h>
+
+#include <CppUTest/CommandLineTestRunner.h>
+#include <CppUTest/TestHarness.h>
+
+static void null(LightDriver self)
+{
+    self = self;
 }
 
-#include "CppUTest/TestHarness.h"
-
-static void null(LightDriver self) { self = self ;}
-
 LightDriverInterfaceStruct doNothing =
-{
-       null, null, null
-};
+    {
+        null, null, null};
 
 LightDriverStruct testDriver =
-{
+    {
         &doNothing,
         "testDriver",
-        13
-};
+        13};
 
-TEST_GROUP(LightDriver)
+TEST_GROUP(LightDriver) {
+void setup()
 {
-    void setup()
-    {
-    }
+}
 
-    void teardown()
-    {
-    }
-};
+void teardown()
+{
+}
+}; // TEST_GROUP(LightDriver)
 
 TEST(LightDriver, NullDriverDoesNoHarm)
 {
@@ -61,3 +61,8 @@ TEST(LightDriver, Accessors)
     STRCMP_EQUAL("testDriver", LightDriver_GetType(&testDriver));
 }
 
+int main(int argc, char **argv)
+{
+    printf("> LightDriverTest ");
+    return RUN_ALL_TESTS(argc, argv);
+}
